@@ -12,3 +12,5 @@
 [Spécification du Open 311](http://wiki.open311.org/GeoReport_v2)
 
 [Spécification de la Ville de Québec](https://www.dropbox.com/sh/pbedflpt50rtkip/eAYLaB-lSZ)
+
+[Open 311 sur Github](https://github.com/open311)
