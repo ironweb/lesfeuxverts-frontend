@@ -22,11 +22,13 @@
 
 	  <!-- Included JS Files (Compressed) -->
 	<script src="assets/js/foundation.min.js"></script>
+	<script src="assets/js/jquery-1.9.1.min.js"></script>
 
 	<!-- Initialize JS Plugins -->
 	<script src="assets/js/app.js"></script>
 
 	<script src="assets/js/modernizr.foundation.js"></script>
+	<script src="assets/js/jquery.pagescroller.lite.js"></script>
 
 	<!-- Included JS Files (Uncompressed) -->
 	<!--
@@ -42,11 +44,33 @@
 </head>
 <body>
 	<div id="Header">
-		<div class="row" >
+		<div class="row">
 			<div class="twelve">
 				<h2>Welcome to Greenlight</h2>
+				<div id="nav">
+					<a href="#">Section 1</a>
+					<a href="#">Section 2</a>
+				</div>
 			</div>
 		</div>
 	</div>
+
+	<div class="row">
+		<div class="twelve" style="height:1000px">
+			<div class="section">Bla bla bla</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="twelve" style="height:1000px">
+			<div class="section">Bla bla bla</div>
+		</div>
+	</div>
+
+	<script>
+	$('body').pageScroller({
+			navigation: '#nav'
+		});
+	</script>
 </body>
     </html>
