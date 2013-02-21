@@ -20,11 +20,20 @@
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
 
 
+    // Set this to true for more log messages
     greenlight.DEBUG = true;
     greenlight.update_services_list();
 
-    // work in progress
-    greenlight.update_requests_list();
+    /* Requests page */
+    greenlight.update_requests_list(0,0);
+
+    $('#servicesList').change(function() {
+        greenlight.update_requests_list($(':selected', this).val(), 0);
+    });
+
+    $('#submitRequestId').click(function() {
+        greenlight.update_requests_list(0, $('#requestId').val());
+    });
 
 
     /* Tabs */
@@ -172,91 +181,41 @@ var greenlight = {
         
     },
 
-    update_requests_list: function(){
+    update_requests_list: function(service, id){
+        $('#requestsList')
+                .html('')
+                .css('background-image', 'url(assets/img/loading.gif)');
+
+        var requestData = {};
+        var urlExt = '';
+        var start = new Date().getMilliseconds();
+
+        if (service != 0) {
+            requestData = { service_code: service }
+        }
+
+        if (id != 0) {
+            urlExt = id;
+        }
+
         /*
-         * Populates the list of requests
-         * based on a bunch of search criteria
-         * */
+     * Populates the list of requests
+     * based on a bunch of search criteria
+     * */
         $.ajax({
-            url: greenlight.BACKEND_URL + '/requests/',
+            url: greenlight.BACKEND_URL + '/requests/' + urlExt,
             dataType: 'json',
-            type: 'GET'
+            type: 'GET',
+            data: requestData
         }).done(function(response, textStatus, jqXHR) {
             if(greenlight.DEBUG){
                 console.log('requests', response.content);
             }
 
-            var requestsHtml = '';
-            var details = new Object();
-            details['description'] = 'Description';
-            details['address'] = 'Adresse';
-            details['zipcode'] = 'Code postal';
-            details['lat'] = 'Latitude';
-            details['long'] = 'Longitude';
-            details['requested_datetime'] = 'Ouverture'; // /Date(1361304360960-0500)/
-            details['service_code'] = 'Numéro';
-            details['service_name'] = 'Service';
-            details['status'] = 'Statut';
-            details['status_notes'] = 'Notes';
-
-            $(response.content).each( function(i, service){
-                requestsHtml += '<article class="toggleBox">';
-                var bottomLinks = '';
-                var addBottomLinks = false;
-
-                requestsHtml += '<header><h1>' + service.service_code + '<span></span></h1></header>';
-                requestsHtml += '<div class="details">';
-                requestsHtml += '<div class="spacer">';
-
-                requestsHtml += '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
-
-                for (var key in details) {
-                    var value = eval('service.' + key);
-
-                    if (key == 'status') {
-                        value = (value == 'open') ? 'Ouvert' : 'Fermé';
-                    }
-
-                    if (value != null && value != 'null' && value != '') {
-                        requestsHtml += '<tr>';
-                        requestsHtml += '<td width="90"><strong>' + details[key] + ' :</strong></td>';
-                        requestsHtml += '<td>' + value + '</td>';
-                        requestsHtml += '</tr>';
-                    }
-                }
-
-                bottomLinks += '<tr>';
-                bottomLinks += '<td colspan="2">';
-
-                if (service.media_url != '') {
-                    addBottomLinks = true;
-                    bottomLinks += '<a href="' + service.media_url + '" target="_blank">Image</a>';
-                }
-
-                if (service.address != '' && service.address != 'null' && service.address != null) {
-                    addBottomLinks = true;
-                    bottomLinks += '<a href="http://maps.google.com/maps?q=' + service.address + '&num=1&t=h&vpsrc=0&ie=UTF8&z=4&iwloc=A" target="_blank">Localisation</a>';
-                } else {
-                    if (service.lat != 0 && service.long != 0) {
-                        addBottomLinks = true;
-                        bottomLinks += '<a href="http://maps.google.com/maps?q=' + service.lat + ',' + service.long + '&num=1&t=h&vpsrc=0&ie=UTF8&z=4&iwloc=A" target="_blank">Localisation</a>';
-                    }
-                }
-
-                bottomLinks += '</td>';
-                bottomLinks += '</tr>';
-
-                if (addBottomLinks) { requestsHtml += bottomLinks; }
-
-                requestsHtml += '</table>';
-
-                requestsHtml += '</div>';
-                requestsHtml += '</div>';
-                requestsHtml += '</article>';
-            });
-
-            $('#requestsList').append(requestsHtml);
-            generateToggleClick();
+            var stop = new Date().getMilliseconds();
+            var executionTime = stop - start;
+            executionTime = (executionTime < 0) ? executionTime * -1 : executionTime;
+            generateRequestDetails(response, executionTime);
 
             // TODO : loop through "response.content" and to things
         }).fail(function(response, textStatus, jqXHR) {
@@ -266,14 +225,96 @@ var greenlight = {
     }
 
 
+
 };
+
+function generateRequestDetails(response, delay) {
+    var nbrResults = (typeof response.content.length == "undefined") ? '1' : response.content.length;
+    $('#resultStats').html('<strong>' + nbrResults + ' résultat(s) trouvé(s)</strong> en ' + (delay / 1000).toFixed(2) + ' secondes');
+    $('#requestsList')
+            .css('background-image', 'none');
+
+    var requestsHtml = '';
+    var details = new Object();
+    details['description'] = 'Description';
+    details['address'] = 'Adresse';
+    details['zipcode'] = 'Code postal';
+    details['lat'] = 'Latitude';
+    details['long'] = 'Longitude';
+    details['requested_datetime'] = 'Ouverture'; // /Date(1361304360960-0500)/
+    details['service_code'] = 'Numéro';
+    details['service_name'] = 'Service';
+    details['status'] = 'Statut';
+    details['status_notes'] = 'Notes';
+    details['service_request_id'] = 'ID';
+
+    $(response.content).each( function(i, service){
+        requestsHtml += '<article class="toggleBox">';
+        var bottomLinks = '';
+        var addBottomLinks = false;
+
+        requestsHtml += '<header><h1>' + service.service_code + '<span></span></h1></header>';
+        requestsHtml += '<div class="details">';
+        requestsHtml += '<div class="spacer">';
+
+        requestsHtml += '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
+
+        for (var key in details) {
+            var value = eval('service.' + key);
+
+            if (key == 'status') {
+                value = (value == 'open') ? 'Ouvert' : 'Fermé';
+            }
+
+            if (value != null && value != 'null' && value != '') {
+                requestsHtml += '<tr>';
+                requestsHtml += '<td width="90"><strong>' + details[key] + ' :</strong></td>';
+                requestsHtml += '<td>' + value + '</td>';
+                requestsHtml += '</tr>';
+            }
+        }
+
+        bottomLinks += '<tr>';
+        bottomLinks += '<td colspan="2">';
+
+        if (service.media_url != '') {
+            addBottomLinks = true;
+            bottomLinks += '<a href="' + service.media_url + '" target="_blank">Image</a>';
+        }
+
+        if (service.address != '' && service.address != 'null' && service.address != null) {
+            addBottomLinks = true;
+            bottomLinks += '<a href="http://maps.google.com/maps?q=' + service.address + '&num=1&t=h&vpsrc=0&ie=UTF8&z=4&iwloc=A" target="_blank">Localisation</a>';
+        } else {
+            if (service.lat != 0 && service.long != 0) {
+                addBottomLinks = true;
+                bottomLinks += '<a href="http://maps.google.com/maps?q=' + service.lat + ',' + service.long + '&num=1&t=h&vpsrc=0&ie=UTF8&z=4&iwloc=A" target="_blank">Localisation</a>';
+            }
+        }
+
+        bottomLinks += '</td>';
+        bottomLinks += '</tr>';
+
+        if (addBottomLinks) { requestsHtml += bottomLinks; }
+
+        requestsHtml += '</table>';
+
+        requestsHtml += '</div>';
+        requestsHtml += '</div>';
+        requestsHtml += '</article>';
+    });
+
+    $('#requestsList').append(requestsHtml);
+    generateToggleClick();
+}
 
 /* Toggles */
 var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
 var toggleSpeed = 250; // Speed of toggle animation
 
 function generateToggleClick() {
-    var toggleBox = $('.toggleBox').unbind('click');
+    toggleBox = $('.toggleBox');
+    $('div').undelegate('article[class^=toggleBox]', 'click');
 
     $('.toggleBox div[class^=details]').each(function() {
         $(this)
@@ -318,6 +359,7 @@ function generateToggleClick() {
                 }, toggleSpeed);
     });
 }
+
 
 /* Maps */
 // TODO : Migrate in greenlight namespace
