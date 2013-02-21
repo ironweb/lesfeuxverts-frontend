@@ -125,3 +125,12 @@
     visibility: visible;
     position: relative;
 }
+
+.toggleBox td {
+    padding: 2px 0;
+}
+#requestsList {
+    background: url(../img/loading.gif) center center no-repeat;
+    min-height: 100px;
+}
+

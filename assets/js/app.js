@@ -26,51 +26,10 @@
     // work in progress
     greenlight.update_requests_list();
 
+
     var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
     var toggleSpeed = 250; // Speed of toggle animation
     var toggleBox = $('.toggleBox');
-
-    $('.details', toggleBox).each(function() {
-        $(this)
-            .attr('data-height', $(this).innerHeight())
-            .css({
-                'height': 0,
-                'display': 'block'
-            });
-    });
-
-    toggleBox.click(function() {
-        var detailsElement = $('.details', this);
-        var detailsHeight = detailsElement.data('height');
-        var openedEq = toggleBox.index($('.opened'));
-        var clickedEq = toggleBox.index($(this));
-
-        if (!multipleToggle) {
-            if (openedEq != -1 && openedEq != clickedEq) {
-                var openedToggleBox = $('.toggleBox:eq(' + openedEq + ')');
-                openedToggleBox.removeClass('opened');
-
-                $('.details', openedToggleBox)
-                        .clearQueue()
-                        .animate({
-                            height: 0
-                        }, toggleSpeed);
-            }
-        }
-
-        if ($(this).hasClass('opened')) {
-            $(this).removeClass('opened');
-            detailsHeight = 0;
-        } else {
-            $(this).addClass('opened');
-        }
-
-        detailsElement
-                .clearQueue()
-                .animate({
-                    height: detailsHeight
-                }, toggleSpeed);
-    });
 
 
     /* Tabs */
@@ -228,6 +187,7 @@ var greenlight = {
                 console.log('requests', response.content);
             }
 
+            var requestsHtml = '';
             var details = new Object();
             details['description'] = 'Description';
             details['address'] = 'Adresse';
@@ -241,7 +201,10 @@ var greenlight = {
             details['status_notes'] = 'Notes';
 
             $(response.content).each( function(i, service){
-                var requestsHtml = '<article class="toggleBox">';
+                requestsHtml += '<article class="toggleBox">';
+                var bottomLinks = '';
+                var addBottomLinks = false;
+
                 requestsHtml += '<header><h1>' + service.service_code + '<span></span></h1></header>';
                 requestsHtml += '<div class="details">';
                 requestsHtml += '<div class="spacer">';
@@ -261,16 +224,40 @@ var greenlight = {
                         requestsHtml += '<td>' + value + '</td>';
                         requestsHtml += '</tr>';
                     }
-                };
+                }
+
+                bottomLinks += '<tr>';
+                bottomLinks += '<td colspan="2">';
+
+                if (service.media_url != '') {
+                    addBottomLinks = true;
+                    bottomLinks += '<a href="' + service.media_url + '" target="_blank">Image</a>';
+                }
+
+                if (service.address != '' && service.address != 'null' && service.address != null) {
+                    addBottomLinks = true;
+                    bottomLinks += '<a href="http://maps.google.com/maps?q=' + service.address + '&num=1&t=h&vpsrc=0&ie=UTF8&z=4&iwloc=A" target="_blank">Localisation</a>';
+                } else {
+                    if (service.lat != 0 && service.long != 0) {
+                        addBottomLinks = true;
+                        bottomLinks += '<a href="http://maps.google.com/maps?q=' + service.lat + ',' + service.long + '&num=1&t=h&vpsrc=0&ie=UTF8&z=4&iwloc=A" target="_blank">Localisation</a>';
+                    }
+                }
+
+                bottomLinks += '</td>';
+                bottomLinks += '</tr>';
+
+                if (addBottomLinks) { requestsHtml += bottomLinks; }
 
                 requestsHtml += '</table>';
 
                 requestsHtml += '</div>';
                 requestsHtml += '</div>';
                 requestsHtml += '</article>';
-
-                $('#requestsList').append(requestsHtml);
             });
+
+            $('#requestsList').append(requestsHtml);
+            generateToggleClick();
 
             // TODO : loop through "response.content" and to things
         }).fail(function(response, textStatus, jqXHR) {
@@ -279,7 +266,56 @@ var greenlight = {
 
     }
 
+
 };
+
+/* Toggles */
+function generateToggleClick() {
+    toggleBox.unbind('click');
+
+    $('.toggleBox div[class^=details]').each(function() {
+        $(this)
+        .attr('data-height', $(this).innerHeight())
+        .css({
+            'height': 0,
+            'display': 'block'
+        });
+    });
+
+    $('div').delegate('article[class^=toggleBox]', 'click', function(event) {
+        event.stopPropagation();
+        var detailsElement = $('.details', this);
+        var detailsHeight = detailsElement.data('height');
+        var openedEq = toggleBox.index($('.opened'));
+        var clickedEq = toggleBox.index($(this));
+
+        if (!multipleToggle) {
+            if (openedEq != -1 && openedEq != clickedEq) {
+                var openedToggleBox = $('.toggleBox:eq(' + openedEq + ')');
+                openedToggleBox.removeClass('opened');
+
+                $('.details', openedToggleBox)
+                    .clearQueue()
+                    .animate({
+                        height: 0
+                }, toggleSpeed);
+            }
+        }
+
+        if ($(this).hasClass('opened')) {
+            $(this).removeClass('opened');
+            detailsHeight = 0;
+        } else {
+            $(this).addClass('opened');
+        }
+
+        detailsElement
+                .clearQueue()
+                .animate({
+                    height: detailsHeight
+                }, toggleSpeed);
+    });
+}
 
 /* Maps */
 // TODO : Migrate in greenlight namespace
