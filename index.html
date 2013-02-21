@@ -52,7 +52,7 @@
 		<div class="row">
 			<div id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></div>
 			<p id="description" class="ten centered clearfix">Certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action.</p>
-			<nav class="right">
+			<nav>
 				<a href="#creation">Faire une demande</a>
 				<a href="#consultation">Consulter les demandes effectuées</a>
 			</nav>	
@@ -97,13 +97,20 @@
 	<section id="s1">
 		<div class="row">
 			<p class="four columns">Voici un petit texte pour décrire le formulaire. Il n'effraie pas les chats et n'attire pas les chiens. Voilà, c'est tout, vous pouvez remballer la cam.</p>
-			<form action="" method="POST" id="creation" class="eight columns">
-				<input type="text" name="firstName" value="Votre prénom">
-				<input type="text" name="lastName" value="Votre nom">
-				<input type="text" name="email" value="Votre courriel">
-				<input type="text" name="phone" value="Votre téléphone">
-                <select id="servicesList"></select>
-			</form>
+
+            <form action="" method="POST" id="creation" class="eight columns">
+                <fieldset>
+                    <legend>Entrez vos informations</legend>
+                    <input type="text" name="firstName" value="Votre prénom">
+                    <input type="text" name="lastName" value="Votre nom">
+                    <input type="text" name="email" value="Votre courriel">
+                    <input type="text" name="phone" value="Votre téléphone">
+                </fieldset>
+                <fieldset>
+                    <legend>Définir la demande</legend>
+                    <select id="servicesList"></select>
+                </fieldset>
+            </form>
 		</div>
 	</section>
 	<section id="s2">

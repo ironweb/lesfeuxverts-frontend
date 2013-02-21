@@ -90,10 +90,16 @@ header {
 	font-weight: 300;
 	line-height: 4rem;
 	text-align: center;
-	margin: 50px 0;
+	margin: 60px auto;
+	display: block;
 }
 
 nav {
+    text-align: center;
+}
+
+nav a {
+    color: #fff;
 }
 
 
