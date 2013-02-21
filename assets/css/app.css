@@ -134,3 +134,7 @@
     min-height: 100px;
 }
 
+#requestsList article header {
+    padding: 0;
+}
+

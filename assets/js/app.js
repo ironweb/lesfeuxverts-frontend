@@ -27,11 +27,6 @@
     greenlight.update_requests_list();
 
 
-    var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
-    var toggleSpeed = 250; // Speed of toggle animation
-    var toggleBox = $('.toggleBox');
-
-
     /* Tabs */
     var tabHeader = $('#tabHeaderContainer .tab');
     var tabContent = $('#tabContentContainer');
@@ -105,8 +100,7 @@
 
 var greenlight = {
 
-    BACKEND_URL: 'http://ironweb-greenlight.herokuapp.com',
-    //BACKEND_URL: 'http://localhost:8000',
+    BACKEND_URL: 'http://lesfeuverts-api.herokuapp.com',
     DEBUG: false,
     
     update_services_list: function(){
@@ -270,8 +264,11 @@ var greenlight = {
 };
 
 /* Toggles */
+var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
+var toggleSpeed = 250; // Speed of toggle animation
+
 function generateToggleClick() {
-    toggleBox.unbind('click');
+    var toggleBox = $('.toggleBox').unbind('click');
 
     $('.toggleBox div[class^=details]').each(function() {
         $(this)
