@@ -18,6 +18,14 @@
     $.fn.foundationClearing         ? $doc.foundationClearing() : null;
 
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
+
+
+    greenlight.DEBUG = true;
+    greenlight.update_services_list();
+
+    // work in progress
+    greenlight.update_requests_list();
+
   });
 
   // UNCOMMENT THE LINE YOU WANT BELOW IF YOU WANT IE8 SUPPORT AND ARE USING .block-grids
@@ -36,3 +44,88 @@
   }
 
 })(jQuery, this);
+
+
+var greenlight = {
+
+    BACKEND_URL: 'http://ironweb-greenlight.herokuapp.com',
+    DEBUG: false,
+    
+    update_services_list: function(){
+        /*
+         * Populates the services list in the form.
+         */
+        $.ajax({
+            url: greenlight.BACKEND_URL + '/services/',
+            dataType: 'json',
+            type: 'GET'
+        }).done(function(response, textStatus, jqXHR) {
+            if(greenlight.DEBUG){
+                console.log('services', response.context);
+            }
+
+            var l = [];
+            $(response.content).each( function(i, service){
+                l.push(service.group + ' - ' + service.service_name);
+            });
+
+            l.sort();
+
+            // TODO : use "l" 
+            //console.log(l);
+
+        }).fail(function(response, textStatus, jqXHR) {
+            // TODO : do something in case it fails
+        });
+    },
+
+    create_request: function(){
+        /*
+         * Creates a new service request using
+         * data in the form
+         * */
+        // TODO : program this function
+        /*
+        $.ajax({
+            url: greenlight.BACKEND_URL + '/services/',
+            dataType: 'json',
+            type: 'POST'
+        }).done(function(response, textStatus, jqXHR) {
+            var l = [];
+            $(response.content).each( function(i, service){
+                l.push(service.group + ' - ' + service.service_name);
+            });
+
+            l.sort();
+
+            // TODO : use "l" 
+            //console.log(l);
+
+        }).fail(function(response, textStatus, jqXHR) {
+            // TODO : do something in case it fails
+        });
+        */
+    },
+
+    update_requests_list: function(){
+        /*
+         * Populates the list of requests
+         * based on a bunch of search criteria
+         * */
+        $.ajax({
+            url: greenlight.BACKEND_URL + '/requests/',
+            dataType: 'json',
+            type: 'GET'
+        }).done(function(response, textStatus, jqXHR) {
+            if(greenlight.DEBUG){
+                console.log('requests', response.content);
+            }
+
+            // TODO : loop through "response.content" and to things
+        }).fail(function(response, textStatus, jqXHR) {
+            // TODO : do something in case it fails
+        });
+
+    }
+
+};
