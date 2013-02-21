@@ -19,6 +19,8 @@
 	<!-- Included CSS Files (Compressed) -->
 	<link rel="stylesheet" href="assets/css/foundation.css">
 	<link rel="stylesheet" href="assets/css/app.css">
+	<link rel="stylesheet" href="assets/css/styles.css">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
 	  <!-- Included JS Files (Compressed) -->
 	<script src="assets/js/foundation.min.js"></script>
@@ -99,17 +101,17 @@
 <body>
 	<header>
 		<div class="row">
-			<div id="logo"><h1>Welcome to Greenlight</h1></div>
+			<div id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></div>
 			<nav class="right">
 				<a href="#creation">Faire une demande</a>
 				<a href="#consultation">Consulter les demandes effectuées</a>
 			</nav>
-			<p id="description" class="six column centered">Lorsque j'étais président, certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action. Il y a certains éléments qu'on ne veut pas que les adversaires politiques connaissent. À ce moment, j’étais en négociations avec le gouvernement, a raconté le député. On a fait le choix de dire: "Cette cause-là est tellement importante, que ça vaut la peine d'aller jusqu'au bout". J’ai pu constater l’importance du dialogue entre les différentes parties.</p>
+			<p id="description" class="ten columns centered clearfix">Certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action.</p>
 			<a href="#creation">Commencez ici</a>
 		</div>
 	</header>
 
-	<section class="creation">
+	<section class="creation" id="s1">
 		<div class="row">
 			<form action="" method="POST" id="creation" class="">
 				<label for="s1">Service #1</label>
@@ -119,7 +121,7 @@
 			</form>
 		</div>
 	</section>
-	<section id="consultation">
+	<section id="s2">
 		<div class="row">
 				Address : 
 				<input type="text" id="address" />

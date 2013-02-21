@@ -1,0 +1,136 @@
+/* -------------------------------------------------- 
+   
+		@author : 			Mathieu Pesant <pesantmathieu@gmail.com>,
+							Alexandre Lefrançois <alexandre.lefrancois@imagedemark.com>,
+							Antoine Savignac <antoine.savignac@gmail.com>
+		@creationDate : 	20/02/2013
+		@modificationDate: 	20/02/2013
+
+-----------------------------------------------------
+*/
+
+
+
+
+/* -------------------------------------------------- 
+   Table of Contents
+-----------------------------------------------------
+:: General
+:: Header
+::
+::
+::
+::
+::
+::
+::;
+*/
+
+
+
+/* -------------------------------------------------- 
+   General
+-----------------------------------------------------
+*/
+html {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 16px;
+	line-height: 1rem;
+}
+
+header, section {
+	padding: 150px 0;
+}
+
+/* -- CLEARFIX -- */
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+	width: 100%;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
+
+h1 {
+	text-transform: uppercase;
+}
+
+
+/* -------------------------------------------------- 
+   Header
+-----------------------------------------------------
+*/
+header {
+	background: #37af78;
+	color: #fff;
+}
+
+#logo {
+	text-align: center;
+}
+
+#description {
+	font-size: 3.5rem;
+	font-weight: 300;
+	line-height: 4rem;
+	text-align: center;
+	margin: 50px 0;
+}
+
+nav {
+}
+
+
+/* -------------------------------------------------- 
+   Contenu
+-----------------------------------------------------
+*/
+#s2 {
+	background: #efefef;
+}
+
+
+
+/* -------------------------------------------------- 
+   Footer
+-----------------------------------------------------
+*/
+footer {
+	background: #1c4654;
+	color: #fff;
+	padding: 40px 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
