@@ -114,6 +114,13 @@
         return "assets/img/"+url[0]+"-"+url[1][0]+"."+url[1][1];
     }
 
+    $('#address_string').bind('keypress', function(e) {
+        if(e.keyCode==13){
+            getAddress();
+        }
+        // Enter pressed... do anything here...
+    });
+
 
     /* Maps */
     initialize(quebec);
