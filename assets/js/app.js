@@ -86,12 +86,33 @@
         $('#container > section.active').fadeOut('slow', function() {
             $(this).css('display','none');
             $(this).removeClass('active');
-            current.addClass('active').css('display', 'block').fadeIn();
+            current.addClass('active').fadeIn();
             });
+
+        var svg1 = $('nav > .active').find('img').attr('src').split('/');
+        svg1 = getUrlSyntax(svg1,'inactif');
+        
+        $('nav > .active').find('img').attr('src',svg1);
+
         tabHeader.removeClass('active');
         $(this).addClass('active');
+
+        var svg2 = $(this).find('img').attr('src').split('/');
+        svg2 = getUrlSyntax(svg2,'actif');
+        
+        $(this).find('img').attr('src',svg2);
       }
     });
+
+    function getUrlSyntax(url,etat)
+    {
+        url = url[url.length-1].split("-");
+        url[1] = url[1].split('.');
+
+        url[1][0] = etat;
+
+        return "assets/img/"+url[0]+"-"+url[1][0]+"."+url[1][1];
+    }
 
 
     /* Maps */
