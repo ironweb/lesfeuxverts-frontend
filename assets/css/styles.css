@@ -117,7 +117,8 @@ nav {
 }
 
 nav a {
-	color: #fff;
+    color: #fff;
+    cursor:pointer;
 }
 
 
@@ -136,6 +137,11 @@ header a {
 #submitMap {
 	cursor: pointer;
 }
+#AddressError
+{
+	color:#FF3300;
+	display:none;
+} 
 
 
 

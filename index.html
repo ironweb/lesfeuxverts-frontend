@@ -9,7 +9,7 @@
 	<!-- Set the viewport width to device width for mobile -->
 	<meta name="viewport" content="width=device-width" />
 
-	<title>J'améliore Québec!</title>
+	<title>Les Feux Verts - Signalez-les !</title>
 
 	<!-- Included CSS Files (Uncompressed) -->
 	<!--
@@ -52,50 +52,19 @@
 			<div id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></div>
 			<p id="description" class="ten centered clearfix hide-for-small">Certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action.</p>
 			<nav>
-				<a href="#creation">Faire une demande</a>
-				<a href="#consultation">Consulter les demandes effectuées</a>
-			</nav>	
+				<a class="tab active">
+					<img src="assets/img/fiche-actif.png" />
+					Faire une demande
+				</a>
+				<a class='tab'>
+					<img src="assets/img/recherche-inactif.png" />
+					Recherchez une demande
+				</a>
+			</nav>
 		</div>
 	</header>
-
-    <section style="display:none;">
-    <div id="requestsList"></div>
-    </section>
-
-    <section id="s2" style="display:none;">
-
-        <div id="tabHeaderContainer">
-            <div class="active tab">Titre</div>
-            <div class="tab">Titre</div>
-            <div class="clear"></div>
-        </div>
-        <div id="tabContentContainer">
-            <section>
-                <header><h1>Section 1<br />Section 1.2</h1></header>
-            </section>
-            <section>
-                <header><h1>Section 2</h1></header>
-            </section>
-        </div>
-
-        <article class="toggleBox">
-            <header><h1>Nom de la demande 1<span></span></h1></header>
-            <div class="details">
-                <div class="spacer">
-                    <p>Description</p>
-                </div>
-            </div>
-        </article>
-        <article class="toggleBox">
-            <header><h1>Nom de la demande 1<span></span></h1></header>
-            <div class="details">
-                <div class="spacer">
-                    <p>Description</p>
-                </div>
-            </div>
-        </article>
-    </section>
 	
+    <!--
 	<form method="POST" id="creation">
 		<section id="s1">
 			<div class="row">
@@ -119,14 +88,54 @@
 			<div class="row">
                 Adresse :
                 <input type="text" id="address_string" /><br />
-                Utiliser ma localisation :
-                <input type="checkbox" id="use-my-location" checked />
 	            <div id="submitMap" onclick="getAddress()">Envoyer</div>
 			</div>
 			<div id="map_canvas" style="width:100%; height:300px"></div>
 			<div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
+            -->
+	<section id="container">
+		<section id="CreationSection" class="tab active">
+			<form method="POST" id="creation">
+				<section id="s1">
+					<div class="row">
+						<p class="four columns">Voici un petit texte pour décrire le formulaire. Il n'effraie pas les chats et n'attire pas les chiens. Voilà, c'est tout, vous pouvez remballer la cam.</p>
+			            <div class="eight columns">
+			                <fieldset>
+			                    <legend>Entrez vos informations</legend>
+			                    <input type="text" name="first_name" placeholder="Votre prénom">
+			                    <input type="text" name="last_name" placeholder="Votre nom">
+			                    <input type="text" name="email" placeholder="Votre courriel">
+			                    <input type="text" name="phone" placeholder="Votre téléphone">
+			                </fieldset>
+			                <fieldset>
+			                    <legend>Définir la demande</legend>
+			                    <select id="servicesList" name="service_code"></select>
+			                </fieldset>
+			            </div>
+					</div>
+				</section>
+				<section id="s2">
+					<div class="row">
+                        Utiliser ma localisation :
+                        <input type="checkbox" id="use-my-location" checked
+                        /><br />
+			            Adresse : 
+			            <input type="text" id="address_string" name="address_string" placeholder="Adresse à chercher"/>
+			            <span id="AddressError">Adresse introuvable</span>
+			            <div onclick="getAddress()">Envoyer</div>
+					</div>
+					<div id="map_canvas" style="width:100%; height:300px"></div>
+					<div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
+				</section>
+				<div onclick="greenlight.create_request();">Envoyer</div>
+			</form>
 		</section>
-	</form>
+
+		<section id="ConsultationSection" class="tab" style="display:none">
+			`sdsdsdsds
+		</section>
+
+	</section>
 
 	<footer>
 		<div class="row">

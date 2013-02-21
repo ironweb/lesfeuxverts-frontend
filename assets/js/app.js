@@ -28,43 +28,51 @@
 
 
     /* Tabs */
-    var tabHeader = $('#tabHeaderContainer .tab');
-    var tabContent = $('#tabContentContainer');
+    var tabHeader = $('nav .tab');
+    var tabContent = $('#container');
     var tabSpeed = 250;
 
-    $('> section', tabContent).each(function() {
-      $(this).attr('data-height', $(this).innerHeight());
-    });
-
-    $('section.tabs', tabContent).css({
-      'position': 'relative',
-      'visibility': 'visible',
-      'display': 'none'
-    });
-
     tabHeader.click(function() {
-      var tabEq = tabHeader.index($(this));
-      var invTabEq = (tabEq == 1) ? 0 : 1;
+     
+    if (!$(this).hasClass('active')) 
+    {
+        var current = $('#container > section:not(.active)');
+        $('#container > section.active').fadeOut('slow', function() {
+            $(this).css('display','none');
+            $(this).removeClass('active');
+            current.addClass('active').fadeIn();
+            });
 
-      if (!$(this).hasClass('active')) {
-          tabHeader.removeClass('active');
-          $(this).addClass('active');
+        var svg1 = $('nav > .active').find('img').attr('src').split('/');
+        svg1 = getUrlSyntax(svg1,'inactif');
+        
+        $('nav > .active').find('img').attr('src',svg1);
 
-          $('#tabContentContainer section:eq(' + invTabEq + ')')
-                  .animate({
-                      opacity: 0
-                  },
-                  tabSpeed,
-                  function() {
-                      $(this).css('display', 'none');
+        tabHeader.removeClass('active');
+        $(this).addClass('active');
 
-                      $('#tabContentContainer section:eq(' + tabEq + ')')
-                              .css('display', 'block')
-                              .animate({
-                                  opacity: 1
-                              })
-                  });
+        var svg2 = $(this).find('img').attr('src').split('/');
+        svg2 = getUrlSyntax(svg2,'actif');
+        
+        $(this).find('img').attr('src',svg2);
       }
+    });
+
+    function getUrlSyntax(url,etat)
+    {
+        url = url[url.length-1].split("-");
+        url[1] = url[1].split('.');
+
+        url[1][0] = etat;
+
+        return "assets/img/"+url[0]+"-"+url[1][0]+"."+url[1][1];
+    }
+
+    $('#address_string').bind('keypress', function(e) {
+        if(e.keyCode==13){
+            getAddress();
+        }
+        // Enter pressed... do anything here...
     });
 
 
@@ -72,10 +80,6 @@
     initialize(quebec);
     getLocation();
     window.addEventListener('resize', ResizeMap, false);
-
-    $('body').pageScroller({
-            navigation: '#nav'
-    });
 
 
   });
@@ -152,14 +156,14 @@ var greenlight = {
             media_url*/
 
         var dataString = $('#creation').serialize();
-            dataString.lat = currentPos.lat;
-            dataString.long = currentPos.lon;
+            dataString += "&lat="+currentPos.lat+"&long="+currentPos.lon;
         
         $.ajax({
-            url: greenlight.BACKEND_URL + '/services/',
+            url: greenlight.BACKEND_URL + '/requests/',
             data:dataString,
             type: 'POST'
         }).done(function(response, textStatus, jqXHR) {
+          console.log(response);
             // Request Create Success
         }).fail(function(response, textStatus, jqXHR) {
             // Request Create Fail
@@ -422,10 +426,11 @@ function getLocation(){
 }
 
 function getAddress() {
-    var address = $('#address').val();
+    var address = $('#address_string').val();
     clearOverlays();
     geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
+        $('#AddressError').fadeOut();
         map.setCenter(results[0].geometry.location);
         var marker = new google.maps.Marker({
             map: map,
@@ -446,6 +451,7 @@ function getAddress() {
     } 
     else 
     {
+        $('#AddressError').fadeIn();
         if(greenlight.DEBUG){
             console.log('Google Maps API could not geolocate this address');
         }
