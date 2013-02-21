@@ -26,6 +26,95 @@
     // work in progress
     greenlight.update_requests_list();
 
+var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
+    var toggleSpeed = 250; // Speed of toggle animation
+    var toggleBox = $('.toggleBox');
+
+    $('.details', toggleBox).each(function() {
+        $(this)
+            .attr('data-height', $(this).innerHeight())
+            .css({
+                'height': 0,
+                'display': 'block'
+            });
+    });
+
+    toggleBox.click(function() {
+        var detailsElement = $('.details', this);
+        var detailsHeight = detailsElement.data('height');
+        var openedEq = toggleBox.index($('.opened'));
+        var clickedEq = toggleBox.index($(this));
+
+        if (!multipleToggle) {
+            if (openedEq != -1 && openedEq != clickedEq) {
+                var openedToggleBox = $('.toggleBox:eq(' + openedEq + ')');
+                openedToggleBox.removeClass('opened');
+
+                $('.details', openedToggleBox)
+                        .clearQueue()
+                        .animate({
+                            height: 0
+                        }, toggleSpeed);
+            }
+        }
+
+        if ($(this).hasClass('opened')) {
+            $(this).removeClass('opened');
+            detailsHeight = 0;
+        } else {
+            $(this).addClass('opened');
+        }
+
+        detailsElement
+                .clearQueue()
+                .animate({
+                    height: detailsHeight
+                }, toggleSpeed);
+    });
+
+
+
+    /* Tabs */
+    var tabHeader = $('#tabHeaderContainer .tab');
+    var tabContent = $('#tabContentContainer');
+    var tabSpeed = 250;
+
+    $('> section', tabContent).each(function() {
+      $(this).attr('data-height', $(this).innerHeight());
+    });
+
+    $('section:eq(1)', tabContent).css({
+      'position': 'relative',
+      'visibility': 'visible',
+      'display': 'none'
+    });
+
+    tabHeader.click(function() {
+      var tabEq = tabHeader.index($(this));
+      var invTabEq = (tabEq == 1) ? 0 : 1;
+
+      if (!$(this).hasClass('active')) {
+          tabHeader.removeClass('active');
+          $(this).addClass('active');
+
+          $('#tabContentContainer section:eq(' + invTabEq + ')')
+                  .animate({
+                      opacity: 0
+                  },
+                  tabSpeed,
+                  function() {
+                      $(this).css('display', 'none');
+
+                      $('#tabContentContainer section:eq(' + tabEq + ')')
+                              .css('display', 'block')
+                              .animate({
+                                  opacity: 1
+                              })
+                  });
+      }
+    });
+
+
   });
 
   // UNCOMMENT THE LINE YOU WANT BELOW IF YOU WANT IE8 SUPPORT AND ARE USING .block-grids
@@ -49,6 +138,7 @@
 var greenlight = {
 
     BACKEND_URL: 'http://ironweb-greenlight.herokuapp.com',
+    //BACKEND_URL: 'http://localhost:8000',
     DEBUG: false,
     
     update_services_list: function(){
@@ -64,15 +154,22 @@ var greenlight = {
                 console.log('services', response.content);
             }
 
+
             var l = [];
+            var d = {};
             $(response.content).each( function(i, service){
-                l.push(service.group + ' - ' + service.service_name);
+                key = service.group + ' - ' + service.service_name;
+                l.push(key);
+                d[key] = service;
             });
 
             l.sort();
 
-            // TODO : use "l" 
-            //console.log(l);
+            $(l).each( function(i, key){
+                service = d[key];
+                $('#servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
+            });
+
 
         }).fail(function(response, textStatus, jqXHR) {
             // TODO : do something in case it fails
