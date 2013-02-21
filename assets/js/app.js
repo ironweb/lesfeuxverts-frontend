@@ -199,14 +199,14 @@ var greenlight = {
             media_url*/
 
         var dataString = $('#creation').serialize();
-            dataString.lat = currentPos.lat;
-            dataString.long = currentPos.lon;
+            dataString += "&lat="+currentPos.lat+"&long="+currentPos.lon;
         
         $.ajax({
-            url: greenlight.BACKEND_URL + '/services/',
+            url: greenlight.BACKEND_URL + '/requests/',
             data:dataString,
             type: 'POST'
         }).done(function(response, textStatus, jqXHR) {
+          console.log(response);
             // Request Create Success
         }).fail(function(response, textStatus, jqXHR) {
             // Request Create Fail
@@ -345,7 +345,7 @@ function getLocation(){
 }
 
 function getAddress() {
-    var address = $('#address').val();
+    var address = $('#address_string').val();
     clearOverlays();
     geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
