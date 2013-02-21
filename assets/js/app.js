@@ -20,97 +20,59 @@
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
 
 
-    greenlight.DEBUG = false;
+    greenlight.DEBUG = true;
     greenlight.update_services_list();
 
     // work in progress
     greenlight.update_requests_list();
 
-    var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
-    var toggleSpeed = 250; // Speed of toggle animation
-    var toggleBox = $('.toggleBox');
-
-    $('.details', toggleBox).each(function() {
-        $(this)
-            .attr('data-height', $(this).innerHeight())
-            .css({
-                'height': 0,
-                'display': 'block'
-            });
-    });
-
-    toggleBox.click(function() {
-        var detailsElement = $('.details', this);
-        var detailsHeight = detailsElement.data('height');
-        var openedEq = toggleBox.index($('.opened'));
-        var clickedEq = toggleBox.index($(this));
-
-        if (!multipleToggle) {
-            if (openedEq != -1 && openedEq != clickedEq) {
-                var openedToggleBox = $('.toggleBox:eq(' + openedEq + ')');
-                openedToggleBox.removeClass('opened');
-
-                $('.details', openedToggleBox)
-                        .clearQueue()
-                        .animate({
-                            height: 0
-                        }, toggleSpeed);
-            }
-        }
-
-        if ($(this).hasClass('opened')) {
-            $(this).removeClass('opened');
-            detailsHeight = 0;
-        } else {
-            $(this).addClass('opened');
-        }
-
-        detailsElement
-                .clearQueue()
-                .animate({
-                    height: detailsHeight
-                }, toggleSpeed);
-    });
-
 
     /* Tabs */
-    var tabHeader = $('#tabHeaderContainer .tab');
-    var tabContent = $('#tabContentContainer');
+    var tabHeader = $('nav .tab');
+    var tabContent = $('#container');
     var tabSpeed = 250;
 
-    $('> section', tabContent).each(function() {
-      $(this).attr('data-height', $(this).innerHeight());
-    });
-
-    $('section.tabs', tabContent).css({
-      'position': 'relative',
-      'visibility': 'visible',
-      'display': 'none'
-    });
-
     tabHeader.click(function() {
-      var tabEq = tabHeader.index($(this));
-      var invTabEq = (tabEq == 1) ? 0 : 1;
+     
+    if (!$(this).hasClass('active')) 
+    {
+        var current = $('#container > section:not(.active)');
+        $('#container > section.active').fadeOut('slow', function() {
+            $(this).css('display','none');
+            $(this).removeClass('active');
+            current.addClass('active').fadeIn();
+            });
 
-      if (!$(this).hasClass('active')) {
-          tabHeader.removeClass('active');
-          $(this).addClass('active');
+        var svg1 = $('nav > .active').find('img').attr('src').split('/');
+        svg1 = getUrlSyntax(svg1,'inactif');
+        
+        $('nav > .active').find('img').attr('src',svg1);
 
-          $('#tabContentContainer section:eq(' + invTabEq + ')')
-                  .animate({
-                      opacity: 0
-                  },
-                  tabSpeed,
-                  function() {
-                      $(this).css('display', 'none');
+        tabHeader.removeClass('active');
+        $(this).addClass('active');
 
-                      $('#tabContentContainer section:eq(' + tabEq + ')')
-                              .css('display', 'block')
-                              .animate({
-                                  opacity: 1
-                              })
-                  });
+        var svg2 = $(this).find('img').attr('src').split('/');
+        svg2 = getUrlSyntax(svg2,'actif');
+        
+        $(this).find('img').attr('src',svg2);
       }
+    });
+
+    function getUrlSyntax(url,etat)
+    {
+        url = url[url.length-1].split("-");
+        url[1] = url[1].split('.');
+
+        url[1][0] = etat;
+
+        return "assets/img/"+url[0]+"-"+url[1][0]+"."+url[1][1];
+    }
+
+    $('#address_string').bind('keypress', function(e) {
+        if(e.keyCode==13){
+            getAddress();
+        }
+        // Enter pressed... do anything here...
     });
 
 
@@ -118,10 +80,6 @@
     initialize(quebec);
     getLocation();
     window.addEventListener('resize', ResizeMap, false);
-
-    $('body').pageScroller({
-            navigation: '#nav'
-    });
 
 
   });
@@ -146,8 +104,7 @@
 
 var greenlight = {
 
-    BACKEND_URL: 'http://ironweb-greenlight.herokuapp.com',
-    //BACKEND_URL: 'http://localhost:8000',
+    BACKEND_URL: 'http://lesfeuverts-api.herokuapp.com',
     DEBUG: false,
     
     update_services_list: function(){
@@ -228,6 +185,7 @@ var greenlight = {
                 console.log('requests', response.content);
             }
 
+            var requestsHtml = '';
             var details = new Object();
             details['description'] = 'Description';
             details['address'] = 'Adresse';
@@ -241,7 +199,10 @@ var greenlight = {
             details['status_notes'] = 'Notes';
 
             $(response.content).each( function(i, service){
-                var requestsHtml = '<article class="toggleBox">';
+                requestsHtml += '<article class="toggleBox">';
+                var bottomLinks = '';
+                var addBottomLinks = false;
+
                 requestsHtml += '<header><h1>' + service.service_code + '<span></span></h1></header>';
                 requestsHtml += '<div class="details">';
                 requestsHtml += '<div class="spacer">';
@@ -261,16 +222,40 @@ var greenlight = {
                         requestsHtml += '<td>' + value + '</td>';
                         requestsHtml += '</tr>';
                     }
-                };
+                }
+
+                bottomLinks += '<tr>';
+                bottomLinks += '<td colspan="2">';
+
+                if (service.media_url != '') {
+                    addBottomLinks = true;
+                    bottomLinks += '<a href="' + service.media_url + '" target="_blank">Image</a>';
+                }
+
+                if (service.address != '' && service.address != 'null' && service.address != null) {
+                    addBottomLinks = true;
+                    bottomLinks += '<a href="http://maps.google.com/maps?q=' + service.address + '&num=1&t=h&vpsrc=0&ie=UTF8&z=4&iwloc=A" target="_blank">Localisation</a>';
+                } else {
+                    if (service.lat != 0 && service.long != 0) {
+                        addBottomLinks = true;
+                        bottomLinks += '<a href="http://maps.google.com/maps?q=' + service.lat + ',' + service.long + '&num=1&t=h&vpsrc=0&ie=UTF8&z=4&iwloc=A" target="_blank">Localisation</a>';
+                    }
+                }
+
+                bottomLinks += '</td>';
+                bottomLinks += '</tr>';
+
+                if (addBottomLinks) { requestsHtml += bottomLinks; }
 
                 requestsHtml += '</table>';
 
                 requestsHtml += '</div>';
                 requestsHtml += '</div>';
                 requestsHtml += '</article>';
-
-                $('#requestsList').append(requestsHtml);
             });
+
+            $('#requestsList').append(requestsHtml);
+            generateToggleClick();
 
             // TODO : loop through "response.content" and to things
         }).fail(function(response, textStatus, jqXHR) {
@@ -279,7 +264,59 @@ var greenlight = {
 
     }
 
+
 };
+
+/* Toggles */
+var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
+var toggleSpeed = 250; // Speed of toggle animation
+
+function generateToggleClick() {
+    var toggleBox = $('.toggleBox').unbind('click');
+
+    $('.toggleBox div[class^=details]').each(function() {
+        $(this)
+        .attr('data-height', $(this).innerHeight())
+        .css({
+            'height': 0,
+            'display': 'block'
+        });
+    });
+
+    $('div').delegate('article[class^=toggleBox]', 'click', function(event) {
+        event.stopPropagation();
+        var detailsElement = $('.details', this);
+        var detailsHeight = detailsElement.data('height');
+        var openedEq = toggleBox.index($('.opened'));
+        var clickedEq = toggleBox.index($(this));
+
+        if (!multipleToggle) {
+            if (openedEq != -1 && openedEq != clickedEq) {
+                var openedToggleBox = $('.toggleBox:eq(' + openedEq + ')');
+                openedToggleBox.removeClass('opened');
+
+                $('.details', openedToggleBox)
+                    .clearQueue()
+                    .animate({
+                        height: 0
+                }, toggleSpeed);
+            }
+        }
+
+        if ($(this).hasClass('opened')) {
+            $(this).removeClass('opened');
+            detailsHeight = 0;
+        } else {
+            $(this).addClass('opened');
+        }
+
+        detailsElement
+                .clearQueue()
+                .animate({
+                    height: detailsHeight
+                }, toggleSpeed);
+    });
+}
 
 /* Maps */
 // TODO : Migrate in greenlight namespace
@@ -393,6 +430,7 @@ function getAddress() {
     clearOverlays();
     geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
+        $('#AddressError').fadeOut();
         map.setCenter(results[0].geometry.location);
         var marker = new google.maps.Marker({
             map: map,
@@ -413,6 +451,7 @@ function getAddress() {
     } 
     else 
     {
+        $('#AddressError').fadeIn();
         if(greenlight.DEBUG){
             console.log('Google Maps API could not geolocate this address');
         }
