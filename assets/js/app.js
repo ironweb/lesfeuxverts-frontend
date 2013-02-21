@@ -115,6 +115,20 @@ var multipleToggle = false; // True if multiple toggle boxes can be opened at th
     });
 
 
+    /* Maps */
+
+
+    initialize(quebec);
+    getLocation();
+    window.addEventListener('resize', ResizeMap, false);
+
+
+
+    $('body').pageScroller({
+            navigation: '#nav'
+    });
+
+
   });
 
   // UNCOMMENT THE LINE YOU WANT BELOW IF YOU WANT IE8 SUPPORT AND ARE USING .block-grids
@@ -226,3 +240,158 @@ var greenlight = {
     }
 
 };
+
+/* Maps */
+// TODO : Migrate in greenlight namespace
+var map;
+var directionsDisplay;
+var directionsService;
+var stepDisplay;
+var markerArray = [];
+var geocoder;
+var currentPos = {};
+
+// Starting Position (Maybe change)
+var quebec = new google.maps.LatLng(46.810811, -71.215439);
+
+var styles = [
+    {
+      stylers: [
+        { hue: "#37af78" },
+        { saturation: 0 }
+      ]
+    },{
+      featureType: "road",
+      elementType: "geometry",
+      stylers: [
+        { lightness: 100 },
+        { visibility: "simplified" }
+      ]
+    },{
+      featureType: "road",
+      elementType: "labels",
+      stylers: [
+        { visibility: "off" }
+      ]
+    }
+];
+
+var styledMap = new google.maps.StyledMapType(styles,{name: "Styled Map"});
+function initialize(pos) 
+{
+        // Instantiate a directions service.
+        directionsService = new google.maps.DirectionsService();
+        geocoder = new google.maps.Geocoder();
+        // Create a map and center it on Manhattan.
+        
+        var mapOptions = {
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                center:pos,
+                scrollwheel: false
+        }
+        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+        // Create a renderer for directions and bind it to the map.
+        var rendererOptions = {
+                map: map
+        }
+        directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions)
+        // Instantiate an info window to hold step text.
+        stepDisplay = new google.maps.InfoWindow();
+
+        map.mapTypes.set('map_style', styledMap);
+        map.setMapTypeId('map_style');
+
+
+}
+
+function debugMsgNoGeoloc(){
+    if(greenlight.DEBUG){
+        console.log('Your device does not support geolocation');
+    }
+}
+
+function getLocation(){
+    /* Depending on available features, gets location
+       directly from device, or uses google API to 
+       get latitude & longitude coordinates.
+     */
+
+    // Not touch screen means not mobile, in 99% cases
+    if(!Modernizr.touch){
+        debugMsgNoGeoloc();
+        return;
+    }
+
+    // No geolocation available
+    if(!Modernizr.geolocation){
+        debugMsgNoGeoloc();
+        return;
+    }
+
+    // Seems like device can geolocate; does the user want it that way ?
+    if(! $('#chk-use-my-location').is(':checked') ){
+        debugMsgNoGeoloc();
+        return;
+    }
+    
+    if(!navigator.geolocation)
+    {
+        debugMsgNoGeoloc();
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+        currentPos.lat = position.coords.latitude;
+        currentPos.lon = position.coords.longitude;
+    });
+
+}
+
+function getAddress() {
+    var address = $('#address').val();
+    clearOverlays();
+    geocoder.geocode( { 'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+        var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+        });
+
+        markerArray.push(marker);
+
+        currentPos.lat = results[0].geometry.location.hb;
+        currentPos.lon = results[0].geometry.location.ib;
+
+    } 
+    else 
+    {
+        if(greenlight.DEBUG){
+            console.log('Google Maps API could not geolocate this address');
+        }
+    }
+    });
+} 
+
+function clearOverlays() 
+{
+    if (markerArray) 
+    {
+        for (i in markerArray) 
+        {
+            markerArray[i].setMap(null);
+        }
+    }
+}
+
+function ResizeMap()
+{
+    var newPos = new google.maps.LatLng(currentPos.lat, currentPos.lon);
+    initialize(newPos);
+    var marker = new google.maps.Marker({
+            map: map,
+            position: newPos
+    });
+}
+
