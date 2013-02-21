@@ -40,7 +40,7 @@ html {
 	line-height: 1rem;
 }
 
-header, section {
+header {
 	padding: 150px 0;
 }
 
@@ -114,6 +114,12 @@ nav a {
 header a {
 	display: inline-block;
 }
+
+#AddressError
+{
+	color:#FF3300;
+	display:none;
+} 
 
 
 

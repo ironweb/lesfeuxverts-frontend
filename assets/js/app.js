@@ -74,42 +74,22 @@
 
 
     /* Tabs */
-    var tabHeader = $('#tabHeaderContainer .tab');
-    var tabContent = $('#tabContentContainer');
+    var tabHeader = $('nav .tab');
+    var tabContent = $('#container');
     var tabSpeed = 250;
 
-    $('> section', tabContent).each(function() {
-      $(this).attr('data-height', $(this).innerHeight());
-    });
-
-    $('section.tabs', tabContent).css({
-      'position': 'relative',
-      'visibility': 'visible',
-      'display': 'none'
-    });
-
     tabHeader.click(function() {
-      var tabEq = tabHeader.index($(this));
-      var invTabEq = (tabEq == 1) ? 0 : 1;
-
-      if (!$(this).hasClass('active')) {
-          tabHeader.removeClass('active');
-          $(this).addClass('active');
-
-          $('#tabContentContainer section:eq(' + invTabEq + ')')
-                  .animate({
-                      opacity: 0
-                  },
-                  tabSpeed,
-                  function() {
-                      $(this).css('display', 'none');
-
-                      $('#tabContentContainer section:eq(' + tabEq + ')')
-                              .css('display', 'block')
-                              .animate({
-                                  opacity: 1
-                              })
-                  });
+     
+    if (!$(this).hasClass('active')) 
+    {
+        var current = $('#container > section:not(.active)');
+        $('#container > section.active').fadeOut('slow', function() {
+            $(this).css('display','none');
+            $(this).removeClass('active');
+            current.addClass('active').css('display', 'block').fadeIn();
+            });
+        tabHeader.removeClass('active');
+        $(this).addClass('active');
       }
     });
 
@@ -118,10 +98,6 @@
     initialize(quebec);
     getLocation();
     window.addEventListener('resize', ResizeMap, false);
-
-    $('body').pageScroller({
-            navigation: '#nav'
-    });
 
 
   });
@@ -349,6 +325,7 @@ function getAddress() {
     clearOverlays();
     geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
+        $('#AddressError').fadeOut();
         map.setCenter(results[0].geometry.location);
         var marker = new google.maps.Marker({
             map: map,
@@ -369,6 +346,7 @@ function getAddress() {
     } 
     else 
     {
+        $('#AddressError').fadeIn();
         if(greenlight.DEBUG){
             console.log('Google Maps API could not geolocate this address');
         }
