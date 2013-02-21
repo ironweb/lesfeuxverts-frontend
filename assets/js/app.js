@@ -104,7 +104,7 @@
 
 var greenlight = {
 
-    BACKEND_URL: 'http://lesfeuverts-api.herokuapp.com',
+    BACKEND_URL: 'http://api.lesfeuxverts.com',
     DEBUG: false,
     
     update_services_list: function(){
