@@ -61,7 +61,7 @@ var greenlight = {
             type: 'GET'
         }).done(function(response, textStatus, jqXHR) {
             if(greenlight.DEBUG){
-                console.log('services', response.context);
+                console.log('services', response.content);
             }
 
             var l = [];
