@@ -1,0 +1,14 @@
+{
+	"_comment": "If you change the manifest, you'll have to regenerate the manifest_encoded and signature values."
+	"manifest": {
+		"expiration": "2020-01-01T00:00:00Z",
+		"conditions": [ 
+			{"bucket": "uploads.lesfeuverts.com"}, 
+			{"acl": "public-read"},
+			["content-length-range", 0, 20000000]
+		]
+	},
+	"manifest_encoded": "eyJjb25kaXRpb25zIjogW3siYnVja2V0IjogInVwbG9hZHMubGVzZmV1dmVydHMuY29tIn0sIHsiYWNsIjogInB1YmxpYy1yZWFkIn0sIFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLCAwLCAyMDAwMDAwMF1dLCAiZXhwaXJhdGlvbiI6ICIyMDIwLTAxLTAxVDAwOjAwOjAwWiJ9",
+	"signature": "vaguAnTr0Qmga4BHbEQp25wOzXc=",
+	"AWS_access_key_ID": "AKIAINBYKLKXBMF7YXHA"
+}
