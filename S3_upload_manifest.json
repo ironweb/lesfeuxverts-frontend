@@ -3,12 +3,12 @@
 	"manifest": {
 		"expiration": "2020-01-01T00:00:00Z",
 		"conditions": [ 
-			{"bucket": "uploads.lesfeuverts.com"}, 
+			{"bucket": "uploads.lesfeuxverts.com"}, 
 			{"acl": "public-read"},
 			["content-length-range", 0, 20000000]
 		]
 	},
-	"manifest_encoded": "eyJjb25kaXRpb25zIjogW3siYnVja2V0IjogInVwbG9hZHMubGVzZmV1dmVydHMuY29tIn0sIHsiYWNsIjogInB1YmxpYy1yZWFkIn0sIFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLCAwLCAyMDAwMDAwMF1dLCAiZXhwaXJhdGlvbiI6ICIyMDIwLTAxLTAxVDAwOjAwOjAwWiJ9",
-	"signature": "vaguAnTr0Qmga4BHbEQp25wOzXc=",
+	"manifest_encoded": "eyJjb25kaXRpb25zIjogW3siYnVja2V0IjogInVwbG9hZHMubGVzZmV1eHZlcnRzLmNvbSJ9LCB7ImFjbCI6ICJwdWJsaWMtcmVhZCJ9LCBbImNvbnRlbnQtbGVuZ3RoLXJhbmdlIiwgMCwgMjAwMDAwMDBdXSwgImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQwMDowMDowMFoifQ==",
+	"signature": "NkZ9NnSFJwLj2ZOhW5gTkSfoeR4=",
 	"AWS_access_key_ID": "AKIAINBYKLKXBMF7YXHA"
 }
