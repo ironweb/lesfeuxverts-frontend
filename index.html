@@ -65,35 +65,6 @@
 		</div>
 	</header>
 	
-    <!--
-	<form method="POST" id="creation">
-		<section id="s1">
-			<div class="row">
-				<p class="four columns">Voici un petit texte pour décrire le formulaire. Il n'effraie pas les chats et n'attire pas les chiens. Voilà, c'est tout, vous pouvez remballer la cam.</p>
-	            <div class="eight columns">
-	                <fieldset>
-	                    <legend>Entrez vos informations</legend>
-	                    <input type="text" name="first_name" value="Votre prénom">
-	                    <input type="text" name="last_name" value="Votre nom">
-	                    <input type="text" name="email" value="Votre courriel">
-	                    <input type="text" name="phone" value="Votre téléphone">
-	                </fieldset>
-	                <fieldset>
-	                    <legend>Définir la demande</legend>
-	                    <select id="servicesList"></select>
-	                </fieldset>
-	            </div>
-			</div>
-		</section>
-		<section id="s2">
-			<div class="row">
-                Adresse :
-                <input type="text" id="address_string" /><br />
-	            <div id="submitMap" onclick="getAddress()">Envoyer</div>
-			</div>
-			<div id="map_canvas" style="width:100%; height:300px"></div>
-			<div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
-            -->
 	<section id="container">
 		<section id="CreationSection" class="tab active">
 			<form method="POST" id="creation">
@@ -115,7 +86,7 @@
 			            </div>
 					</div>
 				</section>
-				<section id="s2">
+				<section>
 					<div class="row">
                         Utiliser ma localisation :
                         <input type="checkbox" id="use-my-location" checked
@@ -125,7 +96,7 @@
 			            <span id="AddressError">Adresse introuvable</span>
 			            <div onclick="getAddress()">Envoyer</div>
 					</div>
-					<div id="map_canvas" style="width:100%; height:300px"></div>
+					<div id="map_canvas"></div>
 					<div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
 				</section>
 				<div onclick="greenlight.create_request();">Envoyer</div>
