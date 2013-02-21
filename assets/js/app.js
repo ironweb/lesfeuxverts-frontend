@@ -20,13 +20,13 @@
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
 
 
-    greenlight.DEBUG = true;
+    greenlight.DEBUG = false;
     greenlight.update_services_list();
 
     // work in progress
     greenlight.update_requests_list();
 
-var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
+    var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
     var toggleSpeed = 250; // Speed of toggle animation
     var toggleBox = $('.toggleBox');
 
@@ -73,7 +73,6 @@ var multipleToggle = false; // True if multiple toggle boxes can be opened at th
     });
 
 
-
     /* Tabs */
     var tabHeader = $('#tabHeaderContainer .tab');
     var tabContent = $('#tabContentContainer');
@@ -83,7 +82,7 @@ var multipleToggle = false; // True if multiple toggle boxes can be opened at th
       $(this).attr('data-height', $(this).innerHeight());
     });
 
-    $('section:eq(1)', tabContent).css({
+    $('section.tabs', tabContent).css({
       'position': 'relative',
       'visibility': 'visible',
       'display': 'none'
@@ -116,13 +115,9 @@ var multipleToggle = false; // True if multiple toggle boxes can be opened at th
 
 
     /* Maps */
-
-
     initialize(quebec);
     getLocation();
     window.addEventListener('resize', ResizeMap, false);
-
-
 
     $('body').pageScroller({
             navigation: '#nav'
