@@ -30,7 +30,7 @@
     /* Tabs */
     var tabHeader = $('nav .tab');
     var tabContent = $('#container');
-    var tabSpeed = 250;
+
 
     tabHeader.click(function() {
      
