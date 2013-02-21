@@ -29,6 +29,7 @@
 
 	<script src="assets/js/modernizr.foundation.js"></script>
 	<script src="assets/js/jquery.pagescroller.lite.js"></script>
+	<script src="assets/js/jquery.ie.cors.js"></script>
 
 	<!-- Included JS Files (Uncompressed) -->
 	<!--
@@ -38,16 +39,64 @@
 	<script src="javascripts/jquery.event.move.js"></script>
 	<script src="javascripts/jquery.event.swipe.js"></script>
 	<script src="javascripts/jquery.foundation.magellan.js"></script>
-	<script src="assets/js/jquery.ie.cors.js"></script>
 	-->
 
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIu5DIUBp5PURxPHxn1tVZXlXUfa-s8QY&sensor=true"></script>
+    <script type="text/javascript">
+        var map;
+        var directionDisplay;
+        var directionsService;
+        var stepDisplay;
+        var markerArray = [];
+        var geocoder;
+        var currentPos = {};
+
+
+        function initialize() 
+        {
+                // Instantiate a directions service.
+                directionsService = new google.maps.DirectionsService();
+				geocoder = new google.maps.Geocoder();
+                // Create a map and center it on Manhattan.
+                var quebec = new google.maps.LatLng(46.810811, -71.215439);
+                var mapOptions = {
+                        zoom: 13,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        center:quebec
+                }
+                map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+                // Create a renderer for directions and bind it to the map.
+                var rendererOptions = {
+                        map: map
+                }
+                directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions)
+                // Instantiate an info window to hold step text.
+                stepDisplay = new google.maps.InfoWindow();
+
+        }
+
+        function getAddress() {
+            var address = $('#address').val();
+            geocoder.geocode( { 'address': address}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+                });
+				
+				currentPos.lat = results[0].geometry.location
+                console.log(results[0]);
+            } 
+            else 
+            {
+                 alert('Geocode was not successful for the following reason: ' + status);
+            }
+            });
+        } 
+    </script>
 </head>
 <body>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Restyle
 	<div id="Header">
 		<div class="row">
 			<div class="twelve">
@@ -72,17 +121,7 @@
 		</div>
 	</div>
 
-	<script>
-	$('body').pageScroller({
-			navigation: '#nav'
-		});
-	</script>
-<<<<<<< HEAD
-=======
-	<header></header>
-=======
-=======
->>>>>>> Restyle
+	
 	
 	<div>
 		<header>
@@ -92,7 +131,6 @@
 			<p id="description">Lorsque j'étais président, certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action. Il y a certains éléments qu'on ne veut pas que les adversaires politiques connaissent. À ce moment, j’étais en négociations avec le gouvernement, a raconté le député. On a fait le choix de dire: "Cette cause-là est tellement importante, que ça vaut la peine d'aller jusqu'au bout". J’ai pu constater l’importance du dialogue entre les différentes parties.</p>
 			<a href="#creation">Commencez ici</a>
 		</header>
->>>>>>> app base HTML structure done
 
 		<section class="creation">
 			<form action="" method="POST" id="creation">
@@ -108,15 +146,25 @@
 				<input type="text">
 			</form>
 		</section>
+		Address : 
+		<input type="text" id="address" />
+		<button onclick="getAddress()">Envoyer</button>
+		<div id="map_canvas" style="width:100%; height:300px"></div>
+    	<div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
 
 	<footer></footer>
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> app base HTML structure
-=======
 
->>>>>>> app base HTML structure done
-=======
->>>>>>> Restyle
+	<script>
+
+	$(document).ready(function(){
+		initialize();
+	});
+
+	$('body').pageScroller({
+			navigation: '#nav'
+		});
+
+
+	</script>
 </body>
-    </html>
+</html>
