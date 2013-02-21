@@ -190,27 +190,28 @@ var greenlight = {
          * Creates a new service request using
          * data in the form
          * */
-        // TODO : program this function
-        /*
+          /*address_string
+            email
+            first_name
+            last_name
+            phone
+            description
+            media_url*/
+
+        var dataString = $('#creation').serialize();
+            dataString.lat = currentPos.lat;
+            dataString.long = currentPos.lon;
+        
         $.ajax({
             url: greenlight.BACKEND_URL + '/services/',
-            dataType: 'json',
+            data:dataString,
             type: 'POST'
         }).done(function(response, textStatus, jqXHR) {
-            var l = [];
-            $(response.content).each( function(i, service){
-                l.push(service.group + ' - ' + service.service_name);
-            });
-
-            l.sort();
-
-            // TODO : use "l" 
-            //console.log(l);
-
+            // Request Create Success
         }).fail(function(response, textStatus, jqXHR) {
-            // TODO : do something in case it fails
+            // Request Create Fail
         });
-        */
+        
     },
 
     update_requests_list: function(){
@@ -249,26 +250,24 @@ var currentPos = {};
 // Starting Position (Maybe change)
 var quebec = new google.maps.LatLng(46.810811, -71.215439);
 
-var styles = [
-    {
-      stylers: [
-        { hue: "#37af78" },
-        { saturation: 0 }
-      ]
-    },{
-      featureType: "road",
-      elementType: "geometry",
-      stylers: [
-        { lightness: 100 },
-        { visibility: "simplified" }
-      ]
-    },{
-      featureType: "road",
-      elementType: "labels",
-      stylers: [
-        { visibility: "off" }
-      ]
-    }
+var styles = 
+[ 
+    { "stylers": 
+        [ 
+            { "hue": "#00ff91" } 
+        ] 
+    },
+    { "featureType": "road", "elementType": "geometry", "stylers": 
+        [ 
+            { "visibility": "simplified" }, 
+            { "hue": "#ff8800" }, { "lightness": 25 } 
+        ] 
+    },
+    { "featureType": "road", "elementType": "labels", "stylers": 
+        [ 
+            { "visibility": "off" } 
+        ] 
+    } 
 ];
 
 var styledMap = new google.maps.StyledMapType(styles,{name: "Styled Map"});
@@ -283,7 +282,9 @@ function initialize(pos)
                 zoom: 13,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 center:pos,
-                scrollwheel: false
+                scrollwheel: false,
+                mapTypeControl:false,
+                streetViewControl: false,
         }
         map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
         // Create a renderer for directions and bind it to the map.
@@ -353,6 +354,12 @@ function getAddress() {
             map: map,
             position: results[0].geometry.location
         });
+
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+
+        $(marker).delay(2000).queue(function( nxt ) {
+                marker.setAnimation(null);
+            });
 
         markerArray.push(marker);
 
