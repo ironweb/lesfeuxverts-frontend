@@ -18,6 +18,11 @@
     $.fn.foundationClearing         ? $doc.foundationClearing() : null;
 
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
+
+
+
+    greenlight.update_services_list();
+
   });
 
   // UNCOMMENT THE LINE YOU WANT BELOW IF YOU WANT IE8 SUPPORT AND ARE USING .block-grids
@@ -36,3 +41,30 @@
   }
 
 })(jQuery, this);
+
+
+var greenlight = {
+
+    BACKEND_URL: 'http://ironweb-greenlight.herokuapp.com',
+    
+    update_services_list: function(){
+        $.ajax({
+            url: greenlight.BACKEND_URL + '/services/',
+            dataType: 'json',
+            type: 'GET'
+        }).done(function(response, textStatus, jqXHR) {
+            var l = [];
+            $(response.content).each( function(i, service){
+                l.push(service.group + ' - ' + service.service_name);
+            });
+
+            l.sort();
+
+            // TODO : use "l" 
+            //console.log(l);
+
+        }).fail(function(response, textStatus, jqXHR) {
+            // TODO : do something in case it fails
+        });
+    }
+};
