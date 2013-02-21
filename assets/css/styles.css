@@ -17,9 +17,9 @@
 -----------------------------------------------------
 :: General
 :: Header
-::
-::
-::
+:: Contenu
+:: Footer
+:: Media Queries
 ::
 ::
 ::
@@ -40,8 +40,8 @@ html {
 	line-height: 1rem;
 }
 
-header, section {
-	padding: 150px 0;
+header, #container {
+	padding: 100px 0;
 }
 
 /* -- CLEARFIX -- */
@@ -71,6 +71,25 @@ h1 {
 	text-transform: uppercase;
 }
 
+h2 {
+	font-family: 'Sanchez', serif;
+	padding-bottom: 40px;
+}
+
+.row {
+	margin: 0 auto;
+	padding: 0 15px;
+	max-width: 90%;
+}
+
+fieldset {
+	border: none;
+}
+
+.lol {
+
+}
+
 
 /* -------------------------------------------------- 
    Header
@@ -91,15 +110,14 @@ header {
 	line-height: 4rem;
 	text-align: center;
 	margin: 60px auto;
-	display: block;
 }
 
 nav {
-    text-align: center;
+	text-align: center;
 }
 
 nav a {
-    color: #fff;
+	color: #fff;
 }
 
 
@@ -115,6 +133,10 @@ header a {
 	display: inline-block;
 }
 
+#submitMap {
+	cursor: pointer;
+}
+
 
 
 /* -------------------------------------------------- 
@@ -126,3 +148,129 @@ footer {
 	color: #fff;
 	padding: 40px 0;
 }
+
+
+
+
+/* -------------------------------------------------- 
+   Media Queries
+-----------------------------------------------------
+*/
+@media only screen and (min-width: 1441px) {
+	.row {
+		width: 1440px;
+	}
+}
+
+@media only screen and (max-width: 1279px) and (min-width: 768px) {
+	#description {
+		font-size: 2rem;
+		line-height: 2.5rem;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+
+}
+
+@media screen and (orientation: landscape) {
+
+}
+
+@media screen and (orientation: portrait) {
+	#description {
+		font-size: 2rem;
+		line-height: 2.5rem;
+	}
+}
+
+
+/* Toggles */
+
+.toggleBox {
+    border: #333 solid 1px;
+}
+.toggleBox + .toggleBox {
+    margin-top: 10px;
+}
+.toggleBox h1 {
+    background-color: #999;
+    color: #FFF;
+    cursor: hand;
+    cursor: pointer;
+    display: block;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0;
+    padding: 5px 10px;
+    position: relative;
+}
+.toggleBox h1 span {
+    background: url(../img/toggle.png) 0 0 no-repeat;
+    display: block;
+    height: 20px;
+    margin-top: -10px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    width: 20px;
+}
+.toggleBox.opened h1 span {
+    background-position: 0 -20px;
+}
+.toggleBox .details {
+    background-color: #CCC;
+    display: none;
+    overflow: hidden;
+}
+.toggleBox .details .spacer {
+    padding: 10px;
+}
+.toggleBox .details p {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Tabs */
+
+#tabHeaderContainer {
+    padding-top: 20px;
+}
+#tabHeaderContainer .tab {
+    border: #333 solid 1px;
+    border-bottom: none;
+    -webkit-border-radius: 10px 10px 0px 0px;
+    border-radius: 10px 10px 0px 0px;
+    cursor: hand;
+    cursor: pointer;
+    float: left;
+    font-size: 16px;
+    padding: 10px 20px;
+    width: 50%;
+}
+#tabHeaderContainer .tab:hover {
+    background-color: #CCC;
+}
+#tabContentContainer > section {
+    visibility: hidden;
+    position: absolute;
+}
+#tabContentContainer > section:first-child {
+    visibility: visible;
+    position: relative;
+}
+
+.toggleBox td {
+    padding: 2px 0;
+}
+#requestsList {
+    background: url(../img/loading.gif) center center no-repeat;
+    min-height: 100px;
+}
+
+#requestsList article header {
+    padding: 0;
+}
+
+

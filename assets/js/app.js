@@ -20,7 +20,7 @@
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
 
 
-    greenlight.DEBUG = false;
+    greenlight.DEBUG = true;
     greenlight.update_services_list();
 
     // work in progress
