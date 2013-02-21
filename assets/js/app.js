@@ -36,11 +36,14 @@
      
     if (!$(this).hasClass('active')) 
     {
+
         var current = $('#container > section:not(.active)');
-        $('#container > section.active').fadeOut('slow', function() {
+        var currentActive = $('#container > section.active');
+        currentActive.removeClass('active');
+        current.addClass('active');
+        currentActive.fadeOut('slow', function() {
             $(this).css('display','none');
-            $(this).removeClass('active');
-            current.addClass('active').fadeIn();
+            current.fadeIn();
             });
 
         var svg1 = $('nav > .active').find('img').attr('src').split('/');
@@ -117,9 +120,7 @@ var greenlight = {
             type: 'GET'
         }).done(function(response, textStatus, jqXHR) {
             if(greenlight.DEBUG){
-                console.log('services', response.content);
             }
-
 
             var l = [];
             var d = {};
@@ -163,7 +164,7 @@ var greenlight = {
             data:dataString,
             type: 'POST'
         }).done(function(response, textStatus, jqXHR) {
-          console.log(response);
+          
             // Request Create Success
         }).fail(function(response, textStatus, jqXHR) {
             // Request Create Fail
