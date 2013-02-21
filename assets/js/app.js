@@ -228,6 +228,50 @@ var greenlight = {
                 console.log('requests', response.content);
             }
 
+            var details = new Object();
+            details['description'] = 'Description';
+            details['address'] = 'Adresse';
+            details['zipcode'] = 'Code postal';
+            details['lat'] = 'Latitude';
+            details['long'] = 'Longitude';
+            details['requested_datetime'] = 'Ouverture'; // /Date(1361304360960-0500)/
+            details['service_code'] = 'Numéro';
+            details['service_name'] = 'Service';
+            details['status'] = 'Statut';
+            details['status_notes'] = 'Notes';
+
+            $(response.content).each( function(i, service){
+                var requestsHtml = '<article class="toggleBox">';
+                requestsHtml += '<header><h1>' + service.service_code + '<span></span></h1></header>';
+                requestsHtml += '<div class="details">';
+                requestsHtml += '<div class="spacer">';
+
+                requestsHtml += '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
+
+                for (var key in details) {
+                    var value = eval('service.' + key);
+
+                    if (key == 'status') {
+                        value = (value == 'open') ? 'Ouvert' : 'Fermé';
+                    }
+
+                    if (value != null && value != 'null' && value != '') {
+                        requestsHtml += '<tr>';
+                        requestsHtml += '<td width="90"><strong>' + details[key] + ' :</strong></td>';
+                        requestsHtml += '<td>' + value + '</td>';
+                        requestsHtml += '</tr>';
+                    }
+                };
+
+                requestsHtml += '</table>';
+
+                requestsHtml += '</div>';
+                requestsHtml += '</div>';
+                requestsHtml += '</article>';
+
+                $('#requestsList').append(requestsHtml);
+            });
+
             // TODO : loop through "response.content" and to things
         }).fail(function(response, textStatus, jqXHR) {
             // TODO : do something in case it fails
