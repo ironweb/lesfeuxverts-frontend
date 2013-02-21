@@ -105,6 +105,10 @@ nav {
 	background: #efefef;
 }
 
+header a {
+	display: inline-block;
+}
+
 
 
 /* -------------------------------------------------- 
@@ -112,7 +116,7 @@ nav {
 -----------------------------------------------------
 */
 footer {
-	background: #1c4654;
+	background: #37af78;
 	color: #fff;
 	padding: 40px 0;
 }

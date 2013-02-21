@@ -64,6 +64,7 @@
                 var mapOptions = {
                         zoom: 13,
                         mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        scrollwheel: false,
                         center:quebec
                 }
                 map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
@@ -102,33 +103,34 @@
 	<header>
 		<div class="row">
 			<div id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></div>
+			<p id="description" class="ten centered clearfix">Certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action.</p>
 			<nav class="right">
 				<a href="#creation">Faire une demande</a>
 				<a href="#consultation">Consulter les demandes effectuées</a>
-			</nav>
-			<p id="description" class="ten columns centered clearfix">Certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action.</p>
-			<a href="#creation">Commencez ici</a>
+			</nav>	
 		</div>
 	</header>
 
 	<section class="creation" id="s1">
 		<div class="row">
-			<form action="" method="POST" id="creation" class="">
-				<label for="s1">Service #1</label>
-				<input type="radio" id="s1" name="services">
-				<label for="s2">Service #2</label>
-				<input type="radio" id="s2" name="services">
+			<p class="four columns">Voici un petit texte pour décrire le formulaire. Il n'effraie pas les chats et n'attire pas les chiens. Voilà, c'est tout, vous pouvez remballer la cam.</p>
+			<form action="" method="POST" id="creation" class="eight columns">
+				<input type="text" name="firstName" value="Votre prénom">
+				<input type="text" name="lastName" value="Votre nom">
+				<input type="text" name="email" value="Votre courriel">
 			</form>
 		</div>
 	</section>
 	<section id="s2">
 		<div class="row">
-				Address : 
+			<form action="#">
+				Adresse : 
 				<input type="text" id="address" />
 				<button onclick="getAddress()">Envoyer</button>
-			</div>
-				<div id="map_canvas" style="width:100%; height:300px"></div>
-				<div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
+			</form>
+		</div>
+		<div id="map_canvas" style="width:100%; height:300px"></div>
+		<div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
 	</section>
 	
 	
