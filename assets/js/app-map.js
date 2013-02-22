@@ -40,13 +40,19 @@ function initialize(pos)
         geocoder = new google.maps.Geocoder();
         // Create a map and center it on Manhattan.
         
-        var mapOptions = {
+       var mapOptions = {
                 zoom: 13,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 center:pos,
                 scrollwheel: false,
                 mapTypeControl:false,
                 streetViewControl: false,
+                panControl: true,
+        }
+
+        if(Modernizr.touch)
+        {
+                mapOptions.draggable = false;
         }
         map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
         // Create a renderer for directions and bind it to the map.
@@ -60,6 +66,8 @@ function initialize(pos)
         map.mapTypes.set('map_style', styledMap);
         map.setMapTypeId('map_style');
 
+
+
         TraceArrondissements();
 }
 
@@ -67,7 +75,7 @@ var ArrondissementData = [];
 function TraceArrondissements()
 {
     jQuery.ajax({
-          url: '/assets/qcdata/ARROND.JSON',
+          url: 'assets/qcdata/ARROND.JSON',
           type: 'GET',
           dataType: 'json',
           complete: function(xhr, textStatus) {
@@ -108,6 +116,7 @@ function TraceArrondissements()
 
       },
       error: function(xhr, textStatus, errorThrown) {
+
       }
     });
 }
@@ -220,9 +229,13 @@ function setMarker(latlng){
 
     $('#AddressError').fadeOut();
     map.setCenter(latlng);
+
+    var image = 'assets/img/map-pointer.png';
+
     var marker = new google.maps.Marker({
         map: map,
-        position: latlng
+        position: latlng,
+        icon: image,
     });
 
     marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -325,10 +338,13 @@ $(document).ready(function() {
 
      };
 
+    $('#address_string').on('input', function() {
+        PlaceAddressMarker();
+    });
 
     $('#address_string').bind('keypress', function(e) {
         if(e.keyCode==13){
-            PlaceAddressMarker();
+           PlaceAddressMarker();
         }
         // Enter pressed... do anything here...
     });

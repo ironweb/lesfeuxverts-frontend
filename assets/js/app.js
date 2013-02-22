@@ -38,44 +38,6 @@
       );
     });
 
-    /* Tabs */
-    var tabHeader = $('nav .tab');
-    var tabContent = $('#container');
-
-    tabHeader.click(function() {
-     
-    if (!$(this).hasClass('active')) {
-
-        var current = $('#container > section:not(.active)');
-
-        $('#Arrow').stop().animate({left: $(this).position().left+$(this).width()/2-$('#Arrow').width()/2});
-
-        var currentActive = $('#container > section.active');
-        currentActive.removeClass('active');
-        current.addClass('active');
-        currentActive.fadeOut('slow', function() {
-            $(this).css('display','none');
-            current.fadeIn();
-            });
-
-        var svg1 = $('nav > .active').find('img').attr('src').split('/');
-        svg1 = getUrlSyntax(svg1,'inactif');
-        
-        $('nav > .active').find('img').attr('src',svg1);
-
-        tabHeader.removeClass('active');
-        $(this).addClass('active');
-
-
-
-        var svg2 = $(this).find('img').attr('src').split('/');
-        svg2 = getUrlSyntax(svg2,'actif');
-        
-        $(this).find('img').attr('src',svg2);
-      }
-    });
-
-
   });
 
   // UNCOMMENT THE LINE YOU WANT BELOW IF YOU WANT IE8 SUPPORT AND ARE USING .block-grids
