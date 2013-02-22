@@ -328,3 +328,21 @@ footer {
 #resultStats {
     padding: 10px 0;
 }
+
+
+#txtSuppInfos {
+	font-size: 0.7rem;
+}
+#txtSuppInfos .mask {
+	height: 36px;
+	overflow: hidden;
+}
+#txtSuppInfos .mask p {
+	padding: 5px;
+}
+#txtSuppInfos .mask p + p {
+	border-top: #CCC dotted 1px;
+}
+#txtSuppInfos .readMore {
+	text-align: right;
+}

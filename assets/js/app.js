@@ -19,10 +19,17 @@
 
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
 
+	  /* ADD */
+	  $('#txtSuppInfos').fadeOut();
+
+	  $('#servicesList').change(function() {
+		  greenlight.update_services_list($(':selected', this).val());
+	  });
+	  /* END ADD */
 
     // Set this to true for more log messages
     greenlight.DEBUG = true;
-    greenlight.update_services_list();
+    greenlight.update_services_list(0);
 
     $('#submitRequestId').click(function() {
         greenlight.update_requests_list(0, $('#requestId').val(), 0, '', '');
@@ -117,32 +124,55 @@ var greenlight = {
     BACKEND_URL: 'http://api.lesfeuxverts.com',
     DEBUG: false,
     
-    update_services_list: function(){
+    update_services_list: function(serviceId){
         /*
          * Populates the services list in the form.
          */
+
+	    var extUrl = (serviceId == 0) ? '' : serviceId;
+
         $.ajax({
-            url: greenlight.BACKEND_URL + '/services/',
+            url: greenlight.BACKEND_URL + '/services/' + extUrl,
             dataType: 'json',
             type: 'GET'
         }).done(function(response, textStatus, jqXHR) {
             if(greenlight.DEBUG){
             }
 
-            var l = [];
-            var d = {};
-            $(response.content).each( function(i, service){
-                key = service.group + ' - ' + service.service_name;
-                l.push(key);
-                d[key] = service;
-            });
+			if (serviceId == 0) {
+	            var l = [];
+	            var d = {};
+	            $(response.content).each( function(i, service){
+	                key = service.group + ' - ' + service.service_name;
+	                l.push(key);
+	                d[key] = service;
+	            });
 
-            l.sort();
+	            l.sort();
 
-            $(l).each( function(i, key){
-                service = d[key];
-                $('.servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
-            });
+	            $(l).each( function(i, key){
+	                service = d[key];
+	                $('.servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
+	            });
+			} else {
+				//console.log(response.content);
+				var txtInfos = '';
+
+				$(response.content.attributes).each(function(i, infos) {
+					if (infos.datatype == 'text') {
+						txtInfos += '<p>' + infos.description + '</p>';
+					}
+				});
+
+				if (txtInfos == '') {
+					$('#txtSuppInfos').fadeOut();
+				} else {
+					$('#txtSuppInfos .mask > div').html(txtInfos);
+					$('#txtSuppInfos').fadeIn();
+				}
+
+				addAnimTxtInfos();
+			}
 
 
         }).fail(function(response, textStatus, jqXHR) {
@@ -589,4 +619,36 @@ if (!Date.prototype.toISOString) {
             + pad(this.getUTCMinutes()) + ':'
             + pad(this.getUTCSeconds()) + 'Z';
     };
+}
+
+function addAnimTxtInfos() {
+	var readMore = $('#txtSuppInfos .readMore');
+
+	readMore
+			.unbind('click')
+			.removeClass('opened');
+
+	$('a', readMore)
+			.html('Lire la suite');
+
+	readMore.click(function(e) {
+	  e.preventDefault();
+	  var mask = $(this).parent('#txtSuppInfos').find('.mask');
+
+	  if ($(this).hasClass('opened')) {
+		  $(this).removeClass('opened');
+		  $('a', this).html('Lire la suite');
+
+		  mask.animate({
+			  height: 36
+		  });
+	  } else {
+		  $(this).addClass('opened');
+		  $('a', this).html('Fermer');
+
+		  mask.animate({
+			  height: $('> div', mask).innerHeight()
+		  });
+	  }
+	});
 }
