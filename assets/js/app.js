@@ -27,7 +27,7 @@
 
     // Set this to true for more log messages
     greenlight.DEBUG = false;
-    greenlight.update_services_list();
+    greenlight.update_services_list(0);
     greenlight.update_requests_list(0, 0, 0, '', '');
 
     $('#submitRequestId').click(function() {
