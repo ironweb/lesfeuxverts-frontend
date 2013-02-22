@@ -19,8 +19,8 @@
 :: Header
 :: Contenu
 :: Footer
+:: Toggles
 :: Media Queries
-::
 ::
 ::
 ::;
@@ -38,10 +38,6 @@ html {
 	font-size: 16px;
 	line-height: 16px;
 	line-height: 1rem;
-}
-
-header, #container {
-	padding: 100px 0;
 }
 
 /* -- CLEARFIX -- */
@@ -73,7 +69,8 @@ h1 {
 
 h2 {
 	font-family: 'Sanchez', serif;
-	padding-bottom: 40px;
+	font-weight: 400;
+	color: #a9a8a8;
 }
 
 .row {
@@ -84,10 +81,22 @@ h2 {
 
 fieldset {
 	border: none;
+	margin: 20px 0;
+	color: #717070;
 }
 
-.lol {
-
+div.button {
+	color: #fff;
+	background: #a9a8a8;
+	padding: 10px 20px;
+	border: 1px solid #ededed;
+	border-radius: 2px;
+	display: inline-block;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
 }
 
 
@@ -98,6 +107,7 @@ fieldset {
 header {
 	background: #37af78;
 	color: #fff;
+	padding: 100px 0 40px 0;
 }
 
 #logo {
@@ -119,6 +129,16 @@ nav {
 nav a {
     color: #fff;
     cursor:pointer;
+    margin: 40px 0 0 0;
+}
+
+header a {
+	display: inline-block;
+}
+
+.tab img {
+	width: 35%;
+	text-align: center;
 }
 
 
@@ -126,12 +146,18 @@ nav a {
    Contenu
 -----------------------------------------------------
 */
-#s2 {
-	background: #efefef;
+
+#container {
+	padding: 100px 0;
 }
 
-header a {
-	display: inline-block;
+#explanation {
+	font-size: 1.25rem;
+	font-weight: 800;
+	line-height: 1.75rem;
+	font-size: ;
+	color: #1c4654;
+	text-align: justify;
 }
 
 #submitMap {
@@ -145,7 +171,15 @@ header a {
 #map_canvas {
 	width: 100%;
 	height: 300px;
+	margin-top: 60px;
 }
+input[type="text"] {
+	height: 45px;
+	padding-left: 5px;
+	font-size: 1.125em;
+	margin-bottom: 15px;
+}
+
 
 
 /* -------------------------------------------------- 
@@ -160,43 +194,10 @@ footer {
 
 
 
-
 /* -------------------------------------------------- 
-   Media Queries
+   Toggles
 -----------------------------------------------------
 */
-@media only screen and (min-width: 1441px) {
-	.row {
-		width: 1440px;
-	}
-}
-
-@media only screen and (max-width: 1279px) and (min-width: 768px) {
-	#description {
-		font-size: 2rem;
-		line-height: 2.5rem;
-	}
-}
-
-@media only screen and (max-width: 767px) {
-	#map_canvas {
-		height: 200px;
-	}
-}
-
-@media screen and (orientation: landscape) {
-
-}
-
-@media screen and (orientation: portrait) {
-	#description {
-		font-size: 2rem;
-		line-height: 2.5rem;
-	}
-}
-
-
-/* Toggles */
 
 .toggleBox {
     border: #333 solid 1px;
@@ -283,6 +284,46 @@ footer {
 #requestsList article header {
     padding: 0;
 }
+
+
+
+/* -------------------------------------------------- 
+   Media Queries
+-----------------------------------------------------
+*/
+@media only screen and (min-width: 1441px) {
+	.row {
+		width: 1440px;
+	}
+}
+
+@media only screen and (max-width: 1279px) and (min-width: 768px) {
+	#description {
+		font-size: 2rem;
+		line-height: 2.5rem;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	#container {
+		padding: 40px 0;
+	}
+	#map_canvas {
+		height: 200px;
+	}
+}
+
+@media screen and (orientation: landscape) {
+
+}
+
+@media screen and (orientation: portrait) {
+	#description {
+		font-size: 2rem;
+		line-height: 2.5rem;
+	}
+}
+
 
 #resultStats {
     padding: 10px 0;
