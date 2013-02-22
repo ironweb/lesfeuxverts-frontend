@@ -55,11 +55,11 @@
 			<nav>
 				<a class="tab active">
 					<img src="assets/img/fiche-actif.png" />
-					Faire une demande
+					<p>Faire une demande</p>
 				</a>
 				<a class='tab'>
 					<img src="assets/img/recherche-inactif.png" />
-					Recherchez une demande
+					<p>Recherchez une demande</p>
 				</a>
 			</nav>
 		</div>
@@ -70,7 +70,8 @@
 			<form method="POST" id="creation">
 				<section class="row">
 					<div class="eight columns centered">
-			            <div class="six columns offset-by-six">
+						<img src="assets/img/schema.png" alt="" class="six columns">
+			            <div class="six columns">
 			                <fieldset>
 			                    <legend><h2>Entrez vos informations</h2></legend>
 			                    <input type="text" name="first_name" class="ten" placeholder="Votre prénom">
@@ -83,7 +84,6 @@
 			                    <select id="servicesList" class="seven clearfix" name="service_code"></select>
 		                        <p>Utiliser ma localisation :</p>
 		                        <input type="checkbox" id="use-my-location" checked/>
-					            <p>Adresse : </p>
 					            <input type="text" id="address_string" class="six" name="address_string" placeholder="Adresse à chercher"/>
 					            <div class="button" onclick="getAddress()">Envoyer</div>
 					            <span id="AddressError">Adresse introuvable</span>
