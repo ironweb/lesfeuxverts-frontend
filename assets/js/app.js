@@ -24,13 +24,13 @@
     greenlight.DEBUG = true;
     greenlight.update_services_list();
 
-    $('#servicesList2').change(function() {
-        greenlight.update_requests_list($(':selected', this).val(), 0);
+    $('#submitRequestId').click(function() {
+        greenlight.update_requests_list(0, $('#requestId').val(), 0, '', '');
     });
 
-    $('#submitRequestId').click(function() {
-        greenlight.update_requests_list(0, $('#requestId').val());
-    });
+	  $('#submitAdvancedSearch').click(function() {
+		  greenlight.update_requests_list($('#servicesList2 :selected').val(), 0, $('#statesList :selected').val(), $('#startDate').val(), $('#endDate').val());
+	  });
 
 
     /* Tabs */
@@ -50,7 +50,7 @@
         currentActive.fadeOut('slow', function() {
             $(this).css('display','none');
             current.fadeIn();
-	        greenlight.update_requests_list(0, 0);
+	        greenlight.update_requests_list(0, 0, 0, '', '');
             });
 
         var svg1 = $('nav > .active').find('img').attr('src').split('/');
@@ -179,7 +179,7 @@ var greenlight = {
         
     },
 
-    update_requests_list: function(service, id){
+    update_requests_list: function(service, id, state, startdate, enddate){
         $('#requestsList')
                 .html('')
                 .css({
@@ -193,21 +193,28 @@ var greenlight = {
 
 	    $('#resultStats')
 			    .html('')
-			    .css('display', 'none');
+			    .css('display', 'block');
 
         var requestData = {};
         var urlExt = '';
+	    var ajaxUrl = greenlight.BACKEND_URL + '/requests/' + urlExt;
         var start = new Date().getMilliseconds();
 
-        if (service != 0) {
-            requestData = { service_code: service }
+        if (service != 0) { requestData.service_code = service; }
+	    if (state != 0) { requestData.status = state; }
+	    if (id != 0) { urlExt = id; }
+
+	    if (startdate != '') {
+		    var tmpStartDate = new Date(startdate);
+		    requestData.start_date = tmpStartDate.toISOString();
+	    }
+        if (enddate != '') {
+	        alert(enddate);
+	        var tmpEndDate = new Date(enddate);
+	        requestData.end_date = tmpEndDate.toISOString();
         }
 
-        if (id != 0) {
-            urlExt = id;
-        }
 
-	    var ajaxUrl = greenlight.BACKEND_URL + '/requests/' + urlExt;
 
 	    if (checkUrl(ajaxUrl)) {
 
@@ -294,9 +301,14 @@ function generateRequestDetails(response, delay) {
         for (var key in details) {
             var value = eval('service.' + key);
 
-            if (key == 'status') {
-                value = (value == 'open') ? 'Ouvert' : 'Fermé';
-            }
+	        switch (key) {
+		        case 'status':
+			        value = (value == 'open') ? 'Ouvert' : 'Fermé';
+			        break;
+		        case 'requested_datetime':
+			        // Format date to YY/mm/dd
+			        break;
+	        }
 
             if (value != null && value != 'null' && value != '') {
                 requestsHtml += '<tr>';
@@ -555,3 +567,15 @@ function ResizeMap()
     });
 }
 
+// http://stackoverflow.com/questions/2573521/how-do-i-output-an-iso-8601-formatted-string-in-javascript
+if (!Date.prototype.toISOString) {
+    Date.prototype.toISOString = function() {
+        function pad(n) { return n < 10 ? '0' + n : n }
+        return this.getUTCFullYear() + '-'
+            + pad(this.getUTCMonth() + 1) + '-'
+            + pad(this.getUTCDate()) + 'T'
+            + pad(this.getUTCHours()) + ':'
+            + pad(this.getUTCMinutes()) + ':'
+            + pad(this.getUTCSeconds()) + 'Z';
+    };
+}
