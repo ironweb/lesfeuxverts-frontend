@@ -100,9 +100,27 @@
 		</section>
 
 		<section id="ConsultationSection" class="tab" style="display:none">
-			<input type="text" id="requestId" /> <input type="button" value="Recherche" id="submitRequestId" />
+            <h2>Recherche par ID</h2>
+            <input type="text" id="requestId" />
+            <input type="button" value="Recherche" id="submitRequestId" />
+
+            <h2>Recherche avancée</h2>
+            <select class="servicesList" id="servicesList2" name="service_code">
+                <option value="0">- Sélectionner un service -</option>
+            </select>
+            <select id="statesList">
+                <option value="0">- Sélectionner un état -</option>
+                <option value="open">Ouvert</option>
+                <option value="closed">Fermé</option>
+            </select>
+            Date début<br /><input type="text" id="startDate" />
+            Date fin<br /><input type="text" id="endDate" />
+            <input type="button" value="Recherche" id="submitAdvancedSearch" />
+
+            <div id="resultStats"></div>
+            <div id="errorMsg" style="border: #F00 dotted 1px; color: #F00; font-size: 14px; line-height: 17px; padding: 5px; text-align: center; font-weight: bold; display: none;"></div>
 			<div id="requestsList"></div>
-			<div id="resultStats"></div>
+
 		</section>
 
 	</section>
