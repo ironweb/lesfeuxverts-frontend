@@ -316,8 +316,15 @@ greenlight.generateRequestDetails = function(response, delay){
     });
 
     $('#requestsList').append(requestsHtml);
+	scrollBodyToContent();
     generateToggleClick();
 };
+
+function scrollBodyToContent() {
+	$('html, body').animate({
+		scrollTop: $('body > header').innerHeight()
+	}, 1000);
+}
 
 
 // http://stackoverflow.com/questions/1591401/javascript-jquery-check-broken-links
