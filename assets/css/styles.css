@@ -50,15 +50,15 @@ html {
 	height: 0;
 	width: 100%;
 }
- 
+
 .clearfix {
 	display: inline-block;
 }
- 
+
 html[xmlns] .clearfix {
 	display: block;
 }
- 
+
 * html .clearfix {
 	height: 1%;
 }
@@ -73,6 +73,11 @@ h2 {
 	color: #a9a8a8;
 }
 
+h3 {
+	font-size: 1.25em;
+	color: #a9a8a8;
+}
+
 .row {
 	margin: 0 auto;
 	padding: 0 15px;
@@ -80,7 +85,7 @@ h2 {
 
 fieldset {
 	border: none;
-	margin: 20px 0;
+	margin: 0 0 40px 0;
 	color: #717070;
 }
 
@@ -107,6 +112,7 @@ header {
 	background: #37af78;
 	color: #fff;
 	padding: 100px 0 40px 0;
+	position: relative;
 }
 
 #logo {
@@ -126,9 +132,9 @@ nav {
 }
 
 nav a {
-    color: #fff;
-    cursor:pointer;
-    margin: 40px 0 0 0;
+	color: #fff;
+	cursor:pointer;
+	margin: 40px 0 0 0;
 }
 
 nav a p {
@@ -148,10 +154,11 @@ header a {
 	width: 100px;
 	text-align: center;
 }
-#Arrow {
-    width:70px;
-    height: 40px;
-    position:absolute;
+object {
+	width:30px;
+	height: 40px;
+	position:absolute;
+	bottom: -10;
 }
 
 
@@ -182,7 +189,7 @@ header a {
 {
 	color:#FF3300;
 	display:none;
-} 
+}
 #map_canvas {
 	width: 100%;
 	height: 300px;
@@ -202,8 +209,23 @@ input[type="text"] {
 	padding: 40px 0;
 	color: #fff;
 }
-
-
+.tip {
+	font-family: 'Sanchez', sans-serif;
+	font-weight: 400;
+	color: #a9a8a8;
+	font-size: 2.5rem;
+	text-align: center;
+	margin: 0 0 100px 0;
+}
+.row .eight {
+	width: 100%;
+}
+.ok {
+	width: 20px;
+	height: 20px;
+	float: right;
+	color: red;
+}
 
 /* -------------------------------------------------- 
    Footer
@@ -230,89 +252,90 @@ footer img {
 */
 
 .toggleBox {
-    border: #333 solid 1px;
+	border-top: #333 solid 1px;
+	border-bottom: #333 solid 1px;
 }
 .toggleBox + .toggleBox {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 .toggleBox h1 {
-    background-color: #999;
-    color: #FFF;
-    cursor: hand;
-    cursor: pointer;
-    display: block;
-    font-size: 16px;
-    font-weight: normal;
-    margin: 0;
-    padding: 5px 10px;
-    position: relative;
+	background: #fff;
+	color: #a9a8a8;
+	cursor: pointer;
+	display: block;
+	font-size: 16px;
+	font-size: 1rem;
+	font-weight: normal;
+	margin: 0;
+	padding: 15px 10px;
+	position: relative;
 }
 .toggleBox h1 span {
-    background: url(../img/toggle.png) 0 0 no-repeat;
-    display: block;
-    height: 20px;
-    margin-top: -10px;
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    width: 20px;
+	background: url(../img/toggle.png) 0 0 no-repeat;
+	display: block;
+	height: 20px;
+	margin-top: -10px;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	width: 20px;
 }
 .toggleBox.opened h1 span {
-    background-position: 0 -20px;
+	background-position: 0 -20px;
 }
 .toggleBox .details {
-    background-color: #CCC;
-    display: none;
-    overflow: hidden;
+	background-color: #CCC;
+	display: none;
+	overflow: hidden;
 }
 .toggleBox .details .spacer {
-    padding: 10px;
+	padding: 10px;
 }
 .toggleBox .details p {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 
 /* Tabs */
 
 #tabHeaderContainer {
-    padding-top: 20px;
+	padding-top: 20px;
 }
 #tabHeaderContainer .tab {
-    border: #333 solid 1px;
-    border-bottom: none;
-    -webkit-border-radius: 10px 10px 0px 0px;
-    border-radius: 10px 10px 0px 0px;
-    cursor: hand;
-    cursor: pointer;
-    float: left;
-    font-size: 16px;
-    padding: 10px 20px;
-    width: 50%;
+	border: #333 solid 1px;
+	border-bottom: none;
+	-webkit-border-radius: 10px 10px 0px 0px;
+	border-radius: 10px 10px 0px 0px;
+	cursor: hand;
+	cursor: pointer;
+	float: left;
+	font-size: 16px;
+	padding: 10px 20px;
+	width: 50%;
 }
 #tabHeaderContainer .tab:hover {
-    background-color: #CCC;
+	background-color: #CCC;
 }
 #tabContentContainer > section {
-    visibility: hidden;
-    position: absolute;
+	visibility: hidden;
+	position: absolute;
 }
 #tabContentContainer > section:first-child {
-    visibility: visible;
-    position: relative;
+	visibility: visible;
+	position: relative;
 }
 
 .toggleBox td {
-    padding: 2px 0;
+	padding: 2px 0;
 }
 #requestsList {
-    background: url(../img/loading.gif) center center no-repeat;
-    min-height: 100px;
+	background: url(../img/loading.gif) center center no-repeat;
+	min-height: 100px;
 }
 
 #requestsList article header {
-    padding: 0;
+	padding: 0;
 }
 
 
@@ -378,7 +401,7 @@ footer img {
 		line-height: 2.5rem;
 	}
 	#Arrow {
-	    display: none;
+		display: none;
 	}
 }
 
@@ -390,12 +413,5 @@ footer img {
 }
 
 #resultStats {
-    padding: 10px 0;
+	padding: 10px 0;
 }
-
-#stats1
-{
-	max-height: 215px;
-}
-
-
