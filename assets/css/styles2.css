@@ -68,3 +68,6 @@ textarea {
 	margin-top: 10px;
 	padding: 4px;
 }
+#upload_picture {
+	display: none;
+}

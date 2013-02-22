@@ -75,13 +75,19 @@
 	<header>
 		<div class="row">
 			<h1 id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></h1>
-			<p id="description" class="ten centered clearfix hide-for-small">Certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action.</p>
+<<<<<<< HEAD
+			<p id="description" class="ten centered clearfix hide-for-small">Participez à améliorer et à faire évoluer votre ville; signalez des problèmes à la Ville de Québec pour assurer une restauration et un suivi efficace.</p>
 			<nav class="row">
 				<a class="tab active four columns">
+=======
+			<p id="description" class="ten centered clearfix hide-for-small">Certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action.</p>
+			<nav>
+				<a class="tab active four">
+>>>>>>> 2d2dad1ce3de40a7d25872266e5194bf166317d4
 					<img src="assets/img/fiche-actif.png" />
 					<p>Faire une demande</p>
 				</a>
-				<a class='tab four columns'>
+				<a class='tab four'>
 					<img src="assets/img/recherche-inactif.png" />
 					<p>Recherchez une demande</p>
 				</a>
@@ -97,14 +103,14 @@
 			<form method="POST" id="creation">
 				<section class="row">
 					<div class="ten columns centered">
-						<img src="assets/img/schema.png" alt="Schéma de l'utilisation" class="six columns hide-for-medium-down">
+						<img src="assets/img/schema.png" alt="Schéma de l'utilisation" class="six columns hide-for-small">
 			            <div class="six columns">
 			                <fieldset>
 			                    <legend><h2>Entrez vos informations</h2></legend>
-			                    <input type="text" id="first_name" name="first_name" class="twelve" placeholder="Votre prénom">
-			                    <input type="text" id="last_name" name="last_name" class="twelve" placeholder="Votre nom">
-			                    <input type="text" id="email" name="email" class="twelve" placeholder="Votre courriel">
-			                    <input type="text" id="phone" name="phone" class="twelve" placeholder="Votre téléphone">
+			                    <input type="text" id="first_name" name="first_name" class="twelve centered-mobile" placeholder="Votre prénom">
+			                    <input type="text" id="last_name" name="last_name" class="twelve centered-mobile" placeholder="Votre nom">
+			                    <input type="text" id="email" name="email" class="twelve centered-mobile" placeholder="Votre courriel">
+			                    <input type="text" id="phone" name="phone" class="twelve centered-mobile" placeholder="Votre téléphone">
 			                </fieldset>
 			                <fieldset>
 			                    <legend><h2>Définir la demande</h2></legend>
@@ -116,27 +122,36 @@
                                     <p class="readMore"><a href="#">Lire la suite</a></p>
                                 </div>
                                 <textarea class="twelve clearfix" placeholder="Description et/ou commentaires"></textarea>
-		                        <p style="padding-top: 15px;">Utiliser ma localisation :<input type="checkbox" id="use-my-location" checked/></p>
+<<<<<<< HEAD
+=======
+		                        <p id="location">Utiliser ma localisation :<input type="checkbox" id="use-my-location" checked/></p>
 		                        <p>
 		                        	<input type="text" id="address_string" class="twelve" name="address_string" placeholder="Adresse à chercher"/>
 					            	<!--<div class="button" onclick="PlaceAddressMarker()">Trouver</div>-->
 					            	<span id="AddressError">Adresse introuvable</span>
 		                        </p>
+>>>>>>> 2d2dad1ce3de40a7d25872266e5194bf166317d4
                                 <form id="form1" enctype="multipart/form-data" method="post">
-                                    <div class="row" style="margin: 0; padding: 0;">
-                                        <label for="file">Vous avez une image de votre problème?</label><br />
+                                    <div class="row" style="margin: 0; padding: 25px 0 0 0;">
+                                        <label for="file">Vous avez une image de votre problème?</label>
                                         <input type="file" name="file" id="file" onchange="fileSelected()"/>
                                     </div>
                                     <div id="fileName"></div>
                                     <div id="fileSize"></div>
                                     <div id="fileType"></div>
-                                    <div class="row" style="margin: 5px 0 0 -3px; padding: 0">
+                                    <div class="row" style="margin: 0 0 0 -3px; padding: 0">
                                         <input type="button" class="button" onclick="uploadFile()" value="Envoyer votre photo" />
                                     </div>
                                     <div id="progressNumber"></div>
                                   <img id="upload_picture" src="http://www.placehold.it/100x100"></img>
                                   <p><img src="assets/img/loading.gif" id="UploadPictureLoader" style="width:30px;display:none"></p>
                                 </form>
+                                <p style="padding-top: 25px;">Utiliser ma localisation :<input type="checkbox" id="use-my-location" checked/></p>
+                                <p>
+                                    <input type="text" id="address_string" class="twelve" name="address_string" placeholder="Adresse à chercher"/>
+                                    <!--<div class="button" onclick="PlaceAddressMarker()">Trouver</div>-->
+                                    <span id="AddressError">Adresse introuvable</span>
+                                </p>
 			                </fieldset>
                             <div class="row" style="margin: 0 0 0 -3px;">
                                 <div onclick="greenlight.create_request();" class="button">Envoyer votre demande</div>
@@ -150,26 +165,49 @@
 			</form>
 		</section>
 		<section id="ConsultationSection" class="tab" style="display:none">
-            <h3>Recherche par ID</h3>
-            <input type="text" id="requestId" />
-            <input type="button" value="Recherche" id="submitRequestId" />
+			<div class="row">
+				<p class="tip twelve">Trouvez une demande par</p>
+				<div class="three columns centered">
+					<h3 class="">Code de vérification</h3>
+					<input type="button" value="Recherche" id="submitRequestId" />
+					<input type="text" id="requestId" />
+				</div>
+				<p class="tip twelve columns">- ou -</p>
 
-            <h3>Recherche avancée</h3>
-            <select class="servicesList" id="servicesList2" name="service_code">
-                <option value="0">- Sélectionner un service -</option>
-            </select>
-            <select id="statesList">
-                <option value="0">- Sélectionner un état -</option>
-                <option value="open">Ouvert</option>
-                <option value="closed">Fermé</option>
-            </select>
-            Date début<br /><input type="text" id="startDate" />
-            Date fin<br /><input type="text" id="endDate" />
-            <input type="button" value="Recherche" id="submitAdvancedSearch" />
+				<div class="eight columns centered">
+					<div class="twelve">
+						<h3>Catégorie</h3>
+						<select class="servicesList" id="servicesList2" name="service_code">
+							<option value="0">- Sélectionner un service -</option>
+						</select>
+					</div>
 
-            <div id="resultStats"></div>
-            <div id="errorMsg" style="border: #F00 dotted 1px; color: #F00; font-size: 14px; line-height: 17px; padding: 5px; text-align: center; font-weight: bold; display: none;"></div>
-			<div id="requestsList"></div>
+					<div class="twelve">
+						<div class="six column">
+							<h3>Date début</h3>
+							<input type="text" id="startDate" />
+						</div>
+						<div class="six column">
+							<h3>Date fin</h3>
+							<input type="text" id="endDate" />
+						</div>
+						<input type="button" value="Recherche" id="submitAdvancedSearch" />
+					</div>
+					<div class="twelve">
+						<select id="statesList">
+							<option value="0">- Sélectionner un état -</option>
+							<option value="open">Ouvert</option>
+							<option value="closed">Fermé</option>
+						</select>
+					</div>
+				</div>
+				<div class="eight columns centered">
+					<div id="resultStats" class="twelve">
+						<div id="errorMsg" class="twelve"></div>
+					</div>
+					<div id="requestsList" class="twelve" style="margin:0 auto;"></div>
+				</div>
+			</div>
 
 		</section>
 	</section>

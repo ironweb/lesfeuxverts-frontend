@@ -7,8 +7,9 @@ function generateToggleClick() {
     $('div').undelegate('article[class^=toggleBox]', 'click');
 
     $('.toggleBox div[class^=details]').each(function() {
+	    var tmpHeight = ($(this).innerHeight() != 0) ? $(this).innerHeight() : 195;
         $(this)
-        .attr('data-height', $(this).innerHeight())
+        .attr('data-height', tmpHeight)
         .css({
             'height': 0,
             'display': 'block'
@@ -73,7 +74,7 @@ $(document).ready(function() {
             currentActive.fadeOut('slow', function() {
                 $(this).css('display','none');
                 current.fadeIn();
-                
+	            generateToggleClick();
             });
 
 
