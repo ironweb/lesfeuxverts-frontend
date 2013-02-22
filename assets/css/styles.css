@@ -155,11 +155,14 @@ header a {
 	text-align: center;
 }
 object {
-	width:30px;
-	height: 40px;
-	position:absolute;
-	bottom: -10;
 }
+
+#Arrow{
+	width:40px;
+	position: absolute;
+	bottom:-5px;
+}
+
 
 
 
@@ -314,6 +317,15 @@ footer img {
 	padding: 10px 20px;
 	width: 50%;
 }
+
+nav a.active img
+{
+	opacity: 1;
+}
+nav a img
+{
+	opacity: .5;
+}
 #tabHeaderContainer .tab:hover {
 	background-color: #CCC;
 }
@@ -414,4 +426,11 @@ footer img {
 
 #resultStats {
 	padding: 10px 0;
+}
+
+#stats1
+{
+	max-height: 215px;
+	max-width: 215px;
+	overflow: hidden;
 }
