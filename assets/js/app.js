@@ -112,9 +112,9 @@ greenlight.create_request = function(){
 
     /* Required fields */
     if( ! (
-        $('first_name').val() &&
-        $('last_name').val() &&
-        $('email').val()
+        $('#first_name').val() &&
+        $('#last_name').val() &&
+        $('#email').val()
     )){
         $("#formValidationErrorMessage").reveal();
         return;
