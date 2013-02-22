@@ -96,7 +96,6 @@
     PlaceCurrentLocationMarker();
     window.addEventListener('resize', ResizeMap, false);
 
-
   });
 
   // UNCOMMENT THE LINE YOU WANT BELOW IF YOU WANT IE8 SUPPORT AND ARE USING .block-grids
@@ -465,8 +464,6 @@ function PlaceCurrentLocationMarker(){
      */
 
     clearOverlays();
-
-    setMarker(quebec);
 
     // Is the current location event relevant ?
     // The user decides.
