@@ -291,8 +291,19 @@ function generateRequestDetails(response, delay) {
         requestsHtml += '<article class="toggleBox">';
         var bottomLinks = '';
         var addBottomLinks = false;
+	    var colors = {};
 
-        requestsHtml += '<header><h1>' + service.service_name + '<span></span></h1></header>';
+	    colors.red = (service.status == 'open' && (service.service_code == '' || service.service_code == null)) ? ' ok' : '';
+	    colors.orange = (service.status == 'open' && (service.service_code != '' && service.service_code != null)) ? ' ok' : '';
+	    colors.green = (service.status == 'closed' && (service.service_code != '' && service.service_code != null)) ? ' ok' : '';
+	    colors.x = (service.status == 'closed' && (service.service_code == '' || service.service_code == null)) ? ' ok' : '';
+
+	    var colorsSpan = '<span class="color red' + colors.red + '"></span>';
+	    colorsSpan += '<span class="color orange' + colors.orange + '"></span>';
+	    colorsSpan += '<span class="color green' + colors.green + '"></span>';
+	    colorsSpan += '<span class="color x' + colors.x + '"></span>';
+
+        requestsHtml += '<header><h1>' + service.service_name + colorsSpan + '</h1></header>';
         requestsHtml += '<div class="details">';
         requestsHtml += '<div class="spacer">';
 
