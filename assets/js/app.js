@@ -120,6 +120,10 @@ greenlight.create_request = function(){
         type: 'POST'
     }).done(function(response, textStatus, jqXHR) {
         // Request Create Success
+        var obj = jQuery.parseJSON(response);
+
+        console.log(obj);
+        $('#RequestToken').html(obj.content.token);
         $("#addRequestSuccessMessage").reveal();
     }).fail(function(response, textStatus, jqXHR) {
         // Request Create Fail
