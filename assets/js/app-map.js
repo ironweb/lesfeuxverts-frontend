@@ -287,6 +287,50 @@ function ResizeMap() {
 
 $(document).ready(function() {
 
+    /*********** Google Map autocomplete */
+    var input = document.getElementById('address_string');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    
+    var infowindow = new google.maps.InfoWindow();
+    
+
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        infowindow.close();
+        input.className = '';
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+            // Inform the user that the place was not found and return.
+            input.className = 'notfound';
+            return;
+        }
+        // If the place has a geometry, then present it on a map.
+        if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+        } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(13); // Why 13? Because it looks good.
+        }
+        var image = {
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(35, 35)
+        };
+        var address = '';
+        PlaceAddressMarker();
+        if (place.address_components) {
+            address = [
+                (place.address_components[0] && place.address_components[0].short_name || ''),
+                (place.address_components[1] && place.address_components[1].short_name || ''),
+                (place.address_components[2] && place.address_components[2].short_name || '')
+            ].join(' ');
+        }
+        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+    }); 
+
+    /*********** Google Map autocomplete */
+
     google.maps.Polygon.prototype.Contains = function(point) {
         // ray casting alogrithm http://rosettacode.org/wiki/Ray-casting_algorithm
         var crossings = 0,
