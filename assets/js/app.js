@@ -24,10 +24,7 @@
     greenlight.DEBUG = true;
     greenlight.update_services_list();
 
-    /* Requests page */
-    greenlight.update_requests_list(0,0);
-
-    $('#servicesList').change(function() {
+    $('#servicesList2').change(function() {
         greenlight.update_requests_list($(':selected', this).val(), 0);
     });
 
@@ -53,6 +50,7 @@
         currentActive.fadeOut('slow', function() {
             $(this).css('display','none');
             current.fadeIn();
+	        greenlight.update_requests_list(0, 0);
             });
 
         var svg1 = $('nav > .active').find('img').attr('src').split('/');
@@ -143,7 +141,7 @@ var greenlight = {
 
             $(l).each( function(i, key){
                 service = d[key];
-                $('#servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
+                $('.servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
             });
 
 
@@ -305,7 +303,7 @@ function generateRequestDetails(response, delay) {
     });
 
     $('#requestsList').append(requestsHtml);
-    generateToggleClick();
+	generateToggleClick();
 }
 
 /* Toggles */

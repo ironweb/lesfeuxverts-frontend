@@ -81,7 +81,7 @@
 			                </fieldset>
 			                <fieldset>
 			                    <legend><h2>Définir la demande</h2></legend>
-			                    <select id="servicesList" name="service_code"></select>
+			                    <select class="servicesList" id="servicesList" name="service_code"></select>
 			                </fieldset>
 			            </div>
 					</div>
@@ -104,9 +104,13 @@
 		</section>
 
 		<section id="ConsultationSection" class="tab" style="display:none">
+            <select class="servicesList" id="servicesList2" name="service_code">
+                <optgroup label="Sélectionner un service"></optgroup>
+            </select>
 			<input type="text" id="requestId" /> <input type="button" value="Recherche" id="submitRequestId" />
+            <div id="resultStats"></div>
 			<div id="requestsList"></div>
-			<div id="resultStats"></div>
+
 		</section>
 
 	</section>
