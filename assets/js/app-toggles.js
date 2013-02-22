@@ -55,6 +55,8 @@ function generateToggleClick() {
 $(document).ready(function() {
     /* Tabs */
 
+    $('#Arrow').css('left',$('nav > a.active').position().left+$('nav > a.active').width()/2-20);
+
     var tabHeader = $('nav .tab');
     var tabContent = $('#container');
 
@@ -63,7 +65,7 @@ $(document).ready(function() {
 
             var current = $('#container > section:not(.active)');
 
-            $('#Arrow').stop().animate({left: $(this).position().left+$(this).width()/2-$('#Arrow').width()/2});
+            $('#Arrow').stop().animate({left: $(this).position().left+$(this).width()/2-(20)});
 
             var currentActive = $('#container > section.active');
             currentActive.removeClass('active');
@@ -79,7 +81,8 @@ $(document).ready(function() {
             $(this).addClass('active');
           }
 
-          $(this).delay(250).queue(function(){scrollBodyToContent()});
+          scrollBodyToContent();
+          
     });
 
     

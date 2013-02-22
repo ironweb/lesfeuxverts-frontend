@@ -23,7 +23,7 @@
     // Set this to true for more log messages
     greenlight.DEBUG = false;
     greenlight.update_services_list();
-    greenlight.update_requests_list(0, 0, 0, '', '');
+    //greenlight.update_requests_list(0, 0, 0, '', '');
 
     $('#submitRequestId').click(function() {
         greenlight.update_requests_list(0, $('#requestId').val(), 0, '', '');
@@ -101,13 +101,6 @@ greenlight.create_request = function(){
      * Creates a new service request using
      * data in the form
      * */
-      /*address_string
-        email
-        first_name
-        last_name
-        phone
-        description
-        media_url*/
 
     if(!CheckPoint())
     {
@@ -322,7 +315,7 @@ greenlight.generateRequestDetails = function(response, delay){
 };
 
 function scrollBodyToContent() {
-	$('html, body').animate({
+	$('html, body').delay(250).animate({
 		scrollTop: $('body > header').innerHeight()
 	}, 500);
 }

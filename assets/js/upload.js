@@ -77,14 +77,12 @@ function uploadFile()
 
 		xhr.send(fd);
 
-
-
     	xhr.onreadystatechange = function() {
     		console.log(xhr.readyState);
 		    if(xhr.readyState == 4)
 		    {
 		    	var media_url = UPLOAD_LINK+encodeURIComponent(filename);
-		    	$('#progressNumber').before('<img src="'+media_url+'">');
+		    	$('#upload_picture').attr('src',media_url);
 		    }
 		}
 
