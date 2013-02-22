@@ -76,7 +76,7 @@ h2 {
 .row {
 	margin: 0 auto;
 	padding: 0 15px;
-	max-width: 90%;
+	max-width: 100%;
 }
 
 fieldset {
