@@ -185,7 +185,7 @@ greenlight.update_requests_list = function(service, id, state, startdate, enddat
             var stop = new Date().getMilliseconds();
             var executionTime = stop - start;
             executionTime = (executionTime < 0) ? executionTime * -1 : executionTime;
-            greenlight.generateRequestDetails(response, executionTime);
+            generateRequestDetails(response, executionTime);
 
             // TODO : loop through "response.content" and to things
         }).fail(function(response, textStatus, jqXHR) {
@@ -203,7 +203,8 @@ greenlight.update_requests_list = function(service, id, state, startdate, enddat
                 .css('display', 'none');
     }
 
-};
+}
+
 
 greenlight.refresh_geolocation_fields = function(use_my_location){
 
@@ -325,6 +326,38 @@ function checkUrl(url) {
   http.open('HEAD', url, false);
   http.send();
   return http.status!=404;
+}
+
+function addAnimTxtInfos() {
+    var readMore = $('#txtSuppInfos .readMore');
+
+    readMore
+            .unbind('click')
+            .removeClass('opened');
+
+    $('a', readMore)
+            .html('Lire la suite');
+
+    readMore.click(function(e) {
+      e.preventDefault();
+      var mask = $(this).parent('#txtSuppInfos').find('.mask');
+
+      if ($(this).hasClass('opened')) {
+          $(this).removeClass('opened');
+          $('a', this).html('Lire la suite');
+
+          mask.animate({
+              height: 36
+          });
+      } else {
+          $(this).addClass('opened');
+          $('a', this).html('Fermer');
+
+          mask.animate({
+              height: $('> div', mask).innerHeight()
+          });
+      }
+    });
 }
 
 
