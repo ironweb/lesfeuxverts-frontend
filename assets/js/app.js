@@ -20,6 +20,7 @@
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
 
 	$('#txtSuppInfos').fadeOut();
+	  $('#advertising').reveal();
 
 	$('#servicesList').change(function() {
 		greenlight.update_services_list($(':selected', this).val());
