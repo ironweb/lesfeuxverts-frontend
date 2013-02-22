@@ -32,6 +32,10 @@
         greenlight.refresh_geolocation_fields( ! $(this).is(':checked') );
     });
 
+    $('#servicesList').change(function(){
+	    //Update adendas
+    });
+
     $('#submitAdvancedSearch').click(function() {
       greenlight.update_requests_list(
           $('#servicesList2 :selected').val(), 0, $('#statesList :selected').val(), $('#startDate').val(), $('#endDate').val()
