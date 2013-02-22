@@ -19,10 +19,15 @@
 
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
 
+	$('#txtSuppInfos').fadeOut();
+
+	$('#servicesList').change(function() {
+		greenlight.update_services_list($(':selected', this).val());
+	});
 
     // Set this to true for more log messages
     greenlight.DEBUG = false;
-    greenlight.update_services_list();
+    greenlight.update_services_list(0);
     //greenlight.update_requests_list(0, 0, 0, '', '');
 
     $('#submitRequestId').click(function() {
@@ -67,32 +72,55 @@ var greenlight = {};
 greenlight.BACKEND_URL = 'http://api.lesfeuxverts.com';
 greenlight.DEBUG = false;
     
-greenlight.update_services_list = function(){
+greenlight.update_services_list = function(serviceId){
     /*
      * Populates the services list in the form.
      */
+	var extUrl = (serviceId == 0) ? '' : serviceId;
+	
     $.ajax({
-        url: greenlight.BACKEND_URL + '/services/',
+	    url: greenlight.BACKEND_URL + '/services/' + extUrl,
         dataType: 'json',
         type: 'GET'
     }).done(function(response, textStatus, jqXHR) {
         if(greenlight.DEBUG){
         }
 
-        var l = [];
-        var d = {};
-        $(response.content).each( function(i, service){
-            key = service.group + ' - ' + service.service_name;
-            l.push(key);
-            d[key] = service;
-        });
-
-        l.sort();
-
-        $(l).each( function(i, key){
-            service = d[key];
-            $('.servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
-        });
+		if (serviceId == 0) {
+			var l = [];
+			var d = {};
+			
+			$(response.content).each( function(i, service){
+				key = service.group + ' - ' + service.service_name;
+				l.push(key);
+				d[key] = service;
+			});
+		
+			l.sort();
+			
+			$(l).each( function(i, key){
+				service = d[key];
+				$('.servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
+			});
+		} else {
+			var txtInfos = '';
+			
+			$(response.content.attributes).each(function(i, infos) {
+				if (infos.datatype == 'text') {
+					txtInfos += '<p>' + infos.description + '</p>';
+				}
+			});
+		
+			if (txtInfos == '') {
+				$('#txtSuppInfos').fadeOut();
+			} else {
+				$('#txtSuppInfos .mask > div').html(txtInfos);
+				$('#txtSuppInfos').fadeIn();
+			}
+		
+			addAnimTxtInfos();
+		}
+        
 
 
     }).fail(function(response, textStatus, jqXHR) {
