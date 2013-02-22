@@ -21,6 +21,8 @@
 	<link rel="stylesheet" href="assets/css/styles.css">
 	<link href='http://fonts.googleapis.com/css?family=Sanchez&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="favicon.ico" type="image/x-icon"> 
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> 
 
 	  <!-- Included JS Files (Compressed) -->
 	<script src="assets/js/foundation.min.js"></script>
@@ -71,22 +73,24 @@
 			<form method="POST" id="creation">
 				<section class="row">
 					<div class="eight columns centered">
-						<img src="assets/img/schema.png" alt="" class="six columns hide-for-small">
-			            <div class="six columns">
+						<img src="assets/img/schema.png" alt="Schéma de l'utilisation" class="six columns hide-for-medium-down">
+			            <div class="six">
 			                <fieldset>
 			                    <legend><h2>Entrez vos informations</h2></legend>
-			                    <input type="text" name="first_name" class="ten mobile-four" placeholder="Votre prénom">
-			                    <input type="text" name="last_name" class="ten mobile-four" placeholder="Votre nom">
-			                    <input type="text" name="email" class="ten mobile-four" placeholder="Votre courriel">
-			                    <input type="text" name="phone" class="ten mobile-four" placeholder="Votre téléphone">
+			                    <input type="text" name="first_name" class="ten" placeholder="Votre prénom">
+			                    <input type="text" name="last_name" class="ten" placeholder="Votre nom">
+			                    <input type="text" name="email" class="ten" placeholder="Votre courriel">
+			                    <input type="text" name="phone" class="ten" placeholder="Votre téléphone">
 			                </fieldset>
 			                <fieldset>
 			                    <legend><h2>Définir la demande</h2></legend>
-			                    <select id="servicesList" class="ten mobile-four clearfix" name="service_code"></select>
+			                    <select id="servicesList" class="ten clearfix" name="service_code"></select>
 		                        <p>Utiliser ma localisation :<input type="checkbox" id="use-my-location" checked/></p>
-					            <input type="text" id="address_string" class="ten mobile-four" name="address_string" placeholder="Adresse à chercher"/>
-					            <div class="button" onclick="getAddress()">Envoyer</div>
-					            <span id="AddressError">Adresse introuvable</span>
+		                        <p>
+		                        	<input type="text" id="address_string" class="ten" name="address_string" placeholder="Adresse à chercher"/>
+					            	<div class="button" onclick="getAddress()">Trouver</div>
+					            	<span id="AddressError">Adresse introuvable</span>
+		                        </p>
 								</div>
 			                </fieldset>
 			            </div>
@@ -94,22 +98,29 @@
 				</section>
 				<div id="map_canvas"></div>
 				<div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
-				<div onclick="greenlight.create_request();">Envoyer</div>
+				<div class="row">
+					<div onclick="greenlight.create_request();" class="right">Envoyer</div>
+				</div>
 			</form>
 		</section>
-
 		<section id="ConsultationSection" class="tab" style="display:none">
 			<input type="text" id="requestId"/>
 			<input type="button" value="Recherche" id="submitRequestId" />
 			<div id="requestsList"></div>
 			<div id="resultStats"></div>
 		</section>
+	</section>
 
+	<section id="stats">
+		<div class="row">
+			<h1>STATISTIQUES ICI.</h1>
+		</div>
 	</section>
 
 	<footer>
 		<div class="row">
-			Fait pour le IronWeb 2013, yo.
+			<p><span>Les Feux Verts</span> est une application web créée dans le cadre du <a href="http://ironweb.org" target="_blank">Iron Web 2013</a> sous la license MIT.</p>
+			<img src="assets/img/ironweb2.png" alt="Iron Web 2013">
 		</div>
 	</footer>
 
