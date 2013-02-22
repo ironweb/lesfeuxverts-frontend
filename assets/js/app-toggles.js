@@ -68,9 +68,10 @@ $(document).ready(function() {
             currentActive.removeClass('active');
             current.addClass('active');
             currentActive.fadeOut('slow', function() {
-                $(this).css('display','none');
+            $(this).css('display','none');
                 current.fadeIn();
-                });
+                greenlight.update_requests_list(0, 0, 0, '', '');
+            });
 
 
             tabHeader.removeClass('active');

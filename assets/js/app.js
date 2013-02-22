@@ -165,7 +165,6 @@ greenlight.update_requests_list = function(service, id, state, startdate, enddat
     }
 
 
-
     if (checkUrl(ajaxUrl)) {
 
         /*
@@ -185,7 +184,7 @@ greenlight.update_requests_list = function(service, id, state, startdate, enddat
             var stop = new Date().getMilliseconds();
             var executionTime = stop - start;
             executionTime = (executionTime < 0) ? executionTime * -1 : executionTime;
-            generateRequestDetails(response, executionTime);
+            greenlight.generateRequestDetails(response, executionTime);
 
             // TODO : loop through "response.content" and to things
         }).fail(function(response, textStatus, jqXHR) {
