@@ -62,7 +62,14 @@
 
 </head>
 <body>
-
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
 	<header>
 		<div class="row">
 			<h1 id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></h1>
@@ -179,6 +186,8 @@
 			<div class="twelve">
 				<p><span>Les Feux Verts</span> est une application sous license MIT créée dans le cadre du <a href="http://ironweb.org">Iron Web 2013</a> sous license MIT.</p>
 				<p>©L'équipe des Justiciers Verts, 2013.</p>
+				<br/>
+				<div class="fb-like" data-href="http://lesfeuxverts.com" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true"></div>
 			</div>
 		</div>
 	</footer>
