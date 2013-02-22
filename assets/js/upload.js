@@ -18,7 +18,7 @@ var secret = manifest.AWS_access_key_ID;
 var policy = manifest.manifest_encoded;
 var signature = manifest.signature;
 
-var UPLOAD_LINK = "https://uploads.lesfeuxverts.com.s3.amazonaws.com/";
+var UPLOAD_LINK = "http://uploads.lesfeuxverts.com.s3.amazonaws.com/";
 
 var file;
 
@@ -40,34 +40,50 @@ function fileSelected()
 	
 }
 
+function rand(length,current){
+ 	current = current ? current : '';
+ 	return length ? rand( --length , "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz".charAt( Math.floor( Math.random() * 60 ) ) + current ) : current;
+}
+
 function uploadFile()
 	{
 	    var fd = new FormData();
 
-	    var key = file.name;
+	    if(file == undefined)
+	    {
+	    	alert('Aucun fichier choisi');
+	    	return;
+	    }
 
-	    fd.append('key', key);
+	    var xhr = new XMLHttpRequest();
+
+	    var randomName = rand(16);
+	    var filename = file.name;
+
+	    filename = filename.split('.');
+		var extension = filename[filename.length-1]; // extension du fichier
+
+		filename = randomName+"."+extension;
+
+	    fd.append('key', filename);
 	    fd.append('Content-Type',file.type);
 	    fd.append('acl', 'public-read');     
 	    fd.append('AWSAccessKeyId', secret);
 	    fd.append('policy', policy)
 	    fd.append('signature',signature);
-	    fd.append("file",file);
-
-	    var xhr = new XMLHttpRequest();;
-
-	    xhr.open('POST', UPLOAD_LINK, true); //MUST BE LAST LINE BEFORE YOU SEND 
+	    fd.append('file',file,filename);
 		
-	    xhr.upload.addEventListener("progress", uploadProgress, false);
-	    xhr.addEventListener("error", uploadFailed, false);
-	    xhr.addEventListener("abort", uploadCanceled, false);
-		
-    	xhr.send(fd);
+		xhr.open('POST', UPLOAD_LINK, true); //MUST BE LAST LINE BEFORE YOU SEND 
+
+		xhr.send(fd);
+
+
 
     	xhr.onreadystatechange = function() {
+    		console.log(xhr.readyState);
 		    if(xhr.readyState == 4)
 		    {
-		    	var media_url = UPLOAD_LINK+encodeURIComponent(file.name);
+		    	var media_url = UPLOAD_LINK+encodeURIComponent(filename);
 		    	$('#progressNumber').before('<img src="'+media_url+'">');
 		    }
 		}
@@ -89,5 +105,5 @@ function uploadFile()
 	}
 
 	function uploadCanceled(evt) {
-	  	alert("The upload has been canceled by the user or the browser dropped the connection.");
+	  	//alert("The upload has been canceled by the user or the browser dropped the connection.");
 	}
