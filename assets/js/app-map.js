@@ -10,7 +10,7 @@ var AllArrond = [];
 
 // Starting Position (Maybe change)
 var quebec = new google.maps.LatLng(46.810811, -71.215439);
-var latlng = quebec;
+latlng = quebec;
 
 var styles = 
 [ 

@@ -114,7 +114,7 @@ greenlight.create_request = function(){
     }
 
     var dataString = $('#creation').serialize();
-    dataString += "&lat="+currentPos.lat+"&long="+currentPos.long;
+    dataString += "&lat="+latlng.hb+"&long="+latlng.ib;
     
     $.ajax({
         url: greenlight.BACKEND_URL + '/requests/',
