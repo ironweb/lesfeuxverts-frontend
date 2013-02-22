@@ -116,15 +116,16 @@ greenlight.create_request = function(){
     var dataString = $('#creation').serialize();
     dataString += "&lat="+latlng.hb+"&long="+latlng.ib;
     
-    $.ajax({
+	$.ajax({
         url: greenlight.BACKEND_URL + '/requests/',
         data:dataString,
         type: 'POST'
     }).done(function(response, textStatus, jqXHR) {
-      
         // Request Create Success
+        $("#addRequestSuccessMessage").reveal();
     }).fail(function(response, textStatus, jqXHR) {
         // Request Create Fail
+		$("#addRequestErrorMessage").reveal();
     });
     
 };

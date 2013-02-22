@@ -33,6 +33,7 @@
     -->
 	<script src="assets/js/modernizr.custom.js"></script>
 	<script src="assets/js/jquery.pagescroller.lite.js"></script>
+    <script src="assets/js/jquery.foundation.reveal.js"></script>
 
 	<!-- Initialize JS Plugins -->
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIu5DIUBp5PURxPHxn1tVZXlXUfa-s8QY&libraries=places&sensor=true"></script>
@@ -104,7 +105,6 @@
 					            	<div class="button" onclick="PlaceAddressMarker()">Trouver</div>
 					            	<span id="AddressError">Adresse introuvable</span>
 		                        </p>
-								</div>
 			                </fieldset>
 			            </div>
 					</div>
@@ -169,5 +169,17 @@
 	</footer>
 	
 	<script src="assets/js/stats.js"></script>
+
+    <div class="reveal-modal large" id="addRequestSuccessMessage">
+        <h2>Votre demande a été envoyée avec succès!</h2>
+        <p>La ville de Québec vous remercie d'avoir allumé un feu pour lui signaler un problème.<br />Un suivi sera effectué auprès de vous par courriel dans les plus brefs délais.</p>
+        <a class="close-reveal-modal">&#215;</a>
+    </div>
+        <div class="reveal-modal large" id="addRequestErrorMessage">
+        <h2>Une erreur est survenue</h2>
+        <p>Une erreur est survenue lors de l'enregistrement de votre demande.<br />Veuillez essayer de nouveau ou communiquer avec le support technique.</p>
+        <a class="close-reveal-modal">&#215;</a>
+    </div>
+
 </body>
 </html>

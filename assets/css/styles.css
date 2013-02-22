@@ -151,7 +151,6 @@ header a {
 	font-size: 1.25rem;
 	font-weight: 800;
 	line-height: 1.75rem;
-	font-size: ;
 	color: #1c4654;
 	text-align: justify;
 }
@@ -192,6 +191,11 @@ div.button {
 	border-radius: 2px;
 	cursor: pointer;
 }
+.reveal-modal p {
+	line-height: 1.4rem;
+	margin-top: 10px;
+}
+
 
 #stats {
 	background: #37af78;
