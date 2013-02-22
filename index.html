@@ -75,7 +75,7 @@
 	<header>
 		<div class="row">
 			<h1 id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></h1>
-			<p id="description" class="ten centered clearfix hide-for-small">Certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action.</p>
+			<p id="description" class="ten centered clearfix hide-for-small">Participez à améliorer et à faire évoluer votre ville; signalez des problèmes à la Ville de Québec pour assurer une restauration et un suivi efficace.</p>
 			<nav class="row">
 				<a class="tab active four columns">
 					<img src="assets/img/fiche-actif.png" />
@@ -116,27 +116,27 @@
                                     <p class="readMore"><a href="#">Lire la suite</a></p>
                                 </div>
                                 <textarea class="twelve clearfix" placeholder="Description et/ou commentaires"></textarea>
-		                        <p style="padding-top: 15px;">Utiliser ma localisation :<input type="checkbox" id="use-my-location" checked/></p>
-		                        <p>
-		                        	<input type="text" id="address_string" class="twelve" name="address_string" placeholder="Adresse à chercher"/>
-					            	<!--<div class="button" onclick="PlaceAddressMarker()">Trouver</div>-->
-					            	<span id="AddressError">Adresse introuvable</span>
-		                        </p>
                                 <form id="form1" enctype="multipart/form-data" method="post">
-                                    <div class="row" style="margin: 0; padding: 0;">
-                                        <label for="file">Vous avez une image de votre problème?</label><br />
+                                    <div class="row" style="margin: 0; padding: 25px 0 0 0;">
+                                        <label for="file">Vous avez une image de votre problème?</label>
                                         <input type="file" name="file" id="file" onchange="fileSelected()"/>
                                     </div>
                                     <div id="fileName"></div>
                                     <div id="fileSize"></div>
                                     <div id="fileType"></div>
-                                    <div class="row" style="margin: 5px 0 0 -3px; padding: 0">
+                                    <div class="row" style="margin: 0 0 0 -3px; padding: 0">
                                         <input type="button" class="button" onclick="uploadFile()" value="Envoyer votre photo" />
                                     </div>
                                     <div id="progressNumber"></div>
                                   <img id="upload_picture" src="http://www.placehold.it/100x100"></img>
                                   <p><img src="assets/img/loading.gif" id="UploadPictureLoader" style="width:30px;display:none"></p>
                                 </form>
+                                <p style="padding-top: 25px;">Utiliser ma localisation :<input type="checkbox" id="use-my-location" checked/></p>
+                                <p>
+                                    <input type="text" id="address_string" class="twelve" name="address_string" placeholder="Adresse à chercher"/>
+                                    <!--<div class="button" onclick="PlaceAddressMarker()">Trouver</div>-->
+                                    <span id="AddressError">Adresse introuvable</span>
+                                </p>
 			                </fieldset>
                             <div class="row" style="margin: 0 0 0 -3px;">
                                 <div onclick="greenlight.create_request();" class="button">Envoyer votre demande</div>

@@ -353,7 +353,6 @@ greenlight.generateRequestDetails = function(response, delay){
     });
 
     $('#requestsList').append(requestsHtml);
-	
     generateToggleClick();
 };
 

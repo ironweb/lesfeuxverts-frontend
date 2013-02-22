@@ -84,7 +84,11 @@ function uploadFile()
 		    {
 		    	var media_url = UPLOAD_LINK+encodeURIComponent(filename);
 		    	$('#upload_picture').attr('src',media_url);
-		    	$('#UploadPictureLoader').fadeOut();
+		    	$('#UploadPictureLoader').fadeOut(
+					    400,
+					    function() {
+						    $('#upload_picture').fadeIn();
+					    });
 		    }
 		}
 
