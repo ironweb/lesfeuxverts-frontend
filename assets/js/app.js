@@ -35,6 +35,9 @@
         greenlight.update_requests_list(0, $('#requestId').val());
     });
 
+    $('#use-my-location').change(function(){
+        greenlight.refresh_geolocation_fields( ! $(this).is(':checked') );
+    });
 
     /* Tabs */
     var tabHeader = $('nav .tab');
@@ -82,7 +85,7 @@
 
     $('#address_string').bind('keypress', function(e) {
         if(e.keyCode==13){
-            getAddress();
+            PlaceAddressMarker();
         }
         // Enter pressed... do anything here...
     });
@@ -90,7 +93,7 @@
 
     /* Maps */
     initialize(quebec);
-    getLocation();
+    PlaceCurrentLocationMarker();
     window.addEventListener('resize', ResizeMap, false);
 
 
@@ -166,7 +169,15 @@ var greenlight = {
             media_url*/
 
         var dataString = $('#creation').serialize();
-            dataString += "&lat="+currentPos.lat+"&long="+currentPos.lon;
+
+        // Try to use GPS coordinates.
+        // No need to check if they're empty; they're optional.
+        if( userAllowsGeolocation() ){
+            if(greenlight.DEBUG){
+                console.log('User chose not to use geolocation.');
+            }
+            dataString += "&lat="+currentPos.lat+"&long="+currentPos.long;
+        }
         
         $.ajax({
             url: greenlight.BACKEND_URL + '/requests/',
@@ -222,9 +233,24 @@ var greenlight = {
             // TODO : do something in case it fails
         });
 
+    },
+
+    refresh_geolocation_fields : function(use_my_location){
+
+        if(use_my_location){
+            $('#address_string').removeAttr('disabled');
+
+            PlaceCurrentLocationMarker();
+
+        } else {
+            $('#address_string').attr('disabled', 'disabled');
+
+            address = $('#address_string').val();
+            if(address)
+                PlaceAddressMarker(address)
+
+        }
     }
-
-
 
 };
 
@@ -369,10 +395,10 @@ var directionsService;
 var stepDisplay;
 var markerArray = [];
 var geocoder;
-var currentPos = {};
 
 // Starting Position (Maybe change)
 var quebec = new google.maps.LatLng(46.810811, -71.215439);
+var latlng = quebec;
 
 var styles = 
 [ 
@@ -397,32 +423,30 @@ var styles =
 var styledMap = new google.maps.StyledMapType(styles,{name: "Styled Map"});
 function initialize(pos) 
 {
-        // Instantiate a directions service.
-        directionsService = new google.maps.DirectionsService();
-        geocoder = new google.maps.Geocoder();
-        // Create a map and center it on Manhattan.
-        
-        var mapOptions = {
-                zoom: 13,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                center:pos,
-                scrollwheel: false,
-                mapTypeControl:false,
-                streetViewControl: false,
-        }
-        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-        // Create a renderer for directions and bind it to the map.
-        var rendererOptions = {
-                map: map
-        }
-        directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions)
-        // Instantiate an info window to hold step text.
-        stepDisplay = new google.maps.InfoWindow();
+    // Instantiate a directions service.
+    directionsService = new google.maps.DirectionsService();
+    geocoder = new google.maps.Geocoder();
+    // Create a map and center it on Manhattan.
+    
+    var mapOptions = {
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center:pos,
+            scrollwheel: false,
+            mapTypeControl:false,
+            streetViewControl: false,
+    }
+    map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+    // Create a renderer for directions and bind it to the map.
+    var rendererOptions = {
+            map: map
+    }
+    directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions)
+    // Instantiate an info window to hold step text.
+    stepDisplay = new google.maps.InfoWindow();
 
-        map.mapTypes.set('map_style', styledMap);
-        map.setMapTypeId('map_style');
-
-
+    map.mapTypes.set('map_style', styledMap);
+    map.setMapTypeId('map_style');
 }
 
 function debugMsgNoGeoloc(){
@@ -431,11 +455,25 @@ function debugMsgNoGeoloc(){
     }
 }
 
-function getLocation(){
+function PlaceCurrentLocationMarker(){
     /* Depending on available features, gets location
        directly from device, or uses google API to 
        get latitude & longitude coordinates.
+
+       Stores it in the "latlng" global as a
+       google.maps.LatLng instance.
      */
+
+    clearOverlays();
+
+    setMarker(quebec);
+
+    // Is the current location event relevant ?
+    // The user decides.
+    if(! $('#chk-use-my-location').is(':checked') ){
+        debugMsgNoGeoloc();
+        return;
+    }
 
     // Not touch screen means not mobile, in 99% cases
     if(!Modernizr.touch){
@@ -449,12 +487,6 @@ function getLocation(){
         return;
     }
 
-    // Seems like device can geolocate; does the user want it that way ?
-    if(! $('#chk-use-my-location').is(':checked') ){
-        debugMsgNoGeoloc();
-        return;
-    }
-    
     if(!navigator.geolocation)
     {
         debugMsgNoGeoloc();
@@ -462,64 +494,72 @@ function getLocation(){
     }
 
     navigator.geolocation.getCurrentPosition(function(position) {
-        currentPos.lat = position.coords.latitude;
-        currentPos.lon = position.coords.longitude;
+        latlng = new google.maps.LatLng(
+            position.coords.latitude, position.coords.longitude
+        );
+        setMarker(latlng);
     });
 
 }
 
-function getAddress() {
-    var address = $('#address_string').val();
+function setMarker(latlng){
+    /*
+     * This function places a marker on the map
+     * with a funny bouncy animation.
+     * latlng must be a google.maps.LatLng instance
+     * */
+
+    $('#AddressError').fadeOut();
+    map.setCenter(latlng);
+    var marker = new google.maps.Marker({
+        map: map,
+        position: latlng
+    });
+
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+
+    $(marker).delay(2000).queue(function( nxt ) {
+        marker.setAnimation(null);
+    });
+
+    markerArray.push(marker);
+
+}
+
+function PlaceAddressMarker(address) {
+
     clearOverlays();
+
+    if(!address)
+        address = $('#address_string').val();
+
     geocoder.geocode( { 'address': address}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-        $('#AddressError').fadeOut();
-        map.setCenter(results[0].geometry.location);
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-        });
-
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-
-        $(marker).delay(2000).queue(function( nxt ) {
-                marker.setAnimation(null);
-            });
-
-        markerArray.push(marker);
-
-        currentPos.lat = results[0].geometry.location.hb;
-        currentPos.lon = results[0].geometry.location.ib;
-
-    } 
-    else 
-    {
-        $('#AddressError').fadeIn();
-        if(greenlight.DEBUG){
-            console.log('Google Maps API could not geolocate this address');
+        if (status == google.maps.GeocoderStatus.OK) {
+            var loc = results[0].geometry.location;
+            latlng = new google.maps.LatLng( loc.lat(), loc.lng() );
+            setMarker(latlng);
+        } else {
+            $('#AddressError').fadeIn();
+            if(greenlight.DEBUG){
+                console.log('Google Maps API could not geolocate this address');
+            }
         }
-    }
     });
 } 
 
-function clearOverlays() 
-{
-    if (markerArray) 
-    {
-        for (i in markerArray) 
-        {
+function clearOverlays() {
+    if (markerArray) {
+        for (i in markerArray) {
             markerArray[i].setMap(null);
         }
     }
 }
 
-function ResizeMap()
-{
-    var newPos = new google.maps.LatLng(currentPos.lat, currentPos.lon);
-    initialize(newPos);
+function ResizeMap() {
+    initialize(latlng);
     var marker = new google.maps.Marker({
-            map: map,
-            position: newPos
+        map: map,
+        position: latlng
     });
 }
 
