@@ -77,12 +77,14 @@ function uploadFile()
 
 		xhr.send(fd);
 
+		$('#UploadPictureLoader').fadeIn();
+
     	xhr.onreadystatechange = function() {
-    		console.log(xhr.readyState);
 		    if(xhr.readyState == 4)
 		    {
 		    	var media_url = UPLOAD_LINK+encodeURIComponent(filename);
 		    	$('#upload_picture').attr('src',media_url);
+		    	$('#UploadPictureLoader').fadeOut();
 		    }
 		}
 

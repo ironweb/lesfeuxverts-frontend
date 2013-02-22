@@ -1,4 +1,24 @@
 
+
+var d = new Date();
+
+console.log(d);
+jQuery.ajax({
+  url: 'http://api.lesfeuxverts.com/stats/states',
+  type: 'GET',
+  data: {'start_date': 'value1'},
+  complete: function(xhr, textStatus) {
+    //called when complete
+  },
+  success: function(data, textStatus, xhr) {
+    //called when successful
+  },
+  error: function(xhr, textStatus, errorThrown) {
+    //called when there is an error
+  }
+});
+
+
 var amount = 87;
 
 
