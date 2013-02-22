@@ -1,14 +1,16 @@
 {
-	"_comment": "If you change the manifest, you'll have to regenerate the manifest_encoded and signature values."
+	"_comment": "If you change the manifest, you'll have to regenerate the manifest_encoded and signature values.",
 	"manifest": {
 		"expiration": "2020-01-01T00:00:00Z",
 		"conditions": [ 
-			{"bucket": "uploads.lesfeuxverts.com"}, 
+			{"bucket": "uploads.lesfeuxverts.com"},
+			["starts-with", "$key", ""],
 			{"acl": "public-read"},
+			["starts-with", "$Content-Type", ""],
 			["content-length-range", 0, 20000000]
 		]
 	},
-	"manifest_encoded": "eyJjb25kaXRpb25zIjogW3siYnVja2V0IjogInVwbG9hZHMubGVzZmV1eHZlcnRzLmNvbSJ9LCB7ImFjbCI6ICJwdWJsaWMtcmVhZCJ9LCBbImNvbnRlbnQtbGVuZ3RoLXJhbmdlIiwgMCwgMjAwMDAwMDBdXSwgImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQwMDowMDowMFoifQ==",
-	"signature": "NkZ9NnSFJwLj2ZOhW5gTkSfoeR4=",
+	"manifest_encoded": "eyJjb25kaXRpb25zIjogW3siYnVja2V0IjogInVwbG9hZHMubGVzZmV1eHZlcnRzLmNvbSJ9LCBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAiIl0sIHsiYWNsIjogInB1YmxpYy1yZWFkIn0sIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICIiXSwgWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsIDAsIDIwMDAwMDAwXV0sICJleHBpcmF0aW9uIjogIjIwMjAtMDEtMDFUMDA6MDA6MDBaIn0=",
+	"signature": "eLi39RSGMtupXieJxcTzLceCHSY=",
 	"AWS_access_key_ID": "AKIAINBYKLKXBMF7YXHA"
 }
