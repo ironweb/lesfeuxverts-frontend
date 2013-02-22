@@ -24,20 +24,20 @@
     greenlight.DEBUG = true;
     greenlight.update_services_list();
 
-    /* Requests page */
-    greenlight.update_requests_list(0,0);
-
-    $('#servicesList').change(function() {
-        greenlight.update_requests_list($(':selected', this).val(), 0);
-    });
-
     $('#submitRequestId').click(function() {
-        greenlight.update_requests_list(0, $('#requestId').val());
+        greenlight.update_requests_list(0, $('#requestId').val(), 0, '', '');
     });
 
     $('#use-my-location').change(function(){
         greenlight.refresh_geolocation_fields( ! $(this).is(':checked') );
     });
+
+    $('#submitAdvancedSearch').click(function() {
+      greenlight.update_requests_list(
+          $('#servicesList2 :selected').val(), 0, $('#statesList :selected').val(), $('#startDate').val(), $('#endDate').val()
+      );
+    });
+
 
     /* Tabs */
     var tabHeader = $('nav .tab');
@@ -56,6 +56,7 @@
         currentActive.fadeOut('slow', function() {
             $(this).css('display','none');
             current.fadeIn();
+	        greenlight.update_requests_list(0, 0, 0, '', '');
             });
 
         var svg1 = $('nav > .active').find('img').attr('src').split('/');
@@ -145,7 +146,7 @@ var greenlight = {
 
             $(l).each( function(i, key){
                 service = d[key];
-                $('#servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
+                $('.servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
             });
 
 
@@ -191,46 +192,79 @@ var greenlight = {
         
     },
 
-    update_requests_list: function(service, id){
+    update_requests_list: function(service, id, state, startdate, enddate){
         $('#requestsList')
                 .html('')
-                .css('background-image', 'url(assets/img/loading.gif)');
+                .css({
+			        'background-image': 'url(assets/img/loading.gif)',
+			        'display': 'block'
+		        });
+
+	    $('#errorMsg')
+			    .html('')
+			    .css('display', 'none');
+
+	    $('#resultStats')
+			    .html('')
+			    .css('display', 'block');
 
         var requestData = {};
         var urlExt = '';
+	    var ajaxUrl = greenlight.BACKEND_URL + '/requests/' + urlExt;
         var start = new Date().getMilliseconds();
 
-        if (service != 0) {
-            requestData = { service_code: service }
+        if (service != 0) { requestData.service_code = service; }
+	    if (state != 0) { requestData.status = state; }
+	    if (id != 0) { urlExt = id; }
+
+	    if (startdate != '') {
+		    var tmpStartDate = new Date(startdate);
+		    requestData.start_date = tmpStartDate.toISOString();
+	    }
+        if (enddate != '') {
+	        alert(enddate);
+	        var tmpEndDate = new Date(enddate);
+	        requestData.end_date = tmpEndDate.toISOString();
         }
 
-        if (id != 0) {
-            urlExt = id;
-        }
 
-        /*
-     * Populates the list of requests
-     * based on a bunch of search criteria
-     * */
-        $.ajax({
-            url: greenlight.BACKEND_URL + '/requests/' + urlExt,
-            dataType: 'json',
-            type: 'GET',
-            data: requestData
-        }).done(function(response, textStatus, jqXHR) {
-            if(greenlight.DEBUG){
-                console.log('requests', response.content);
-            }
 
-            var stop = new Date().getMilliseconds();
-            var executionTime = stop - start;
-            executionTime = (executionTime < 0) ? executionTime * -1 : executionTime;
-            generateRequestDetails(response, executionTime);
+	    if (checkUrl(ajaxUrl)) {
 
-            // TODO : loop through "response.content" and to things
-        }).fail(function(response, textStatus, jqXHR) {
-            // TODO : do something in case it fails
-        });
+	        /*
+	     * Populates the list of requests
+	     * based on a bunch of search criteria
+	     * */
+	        $.ajax({
+	            url: greenlight.BACKEND_URL + '/requests/' + urlExt,
+	            dataType: 'json',
+	            type: 'GET',
+	            data: requestData
+	        }).done(function(response, textStatus, jqXHR) {
+	            if(greenlight.DEBUG){
+	                console.log('requests', response.content);
+	            }
+
+	            var stop = new Date().getMilliseconds();
+	            var executionTime = stop - start;
+	            executionTime = (executionTime < 0) ? executionTime * -1 : executionTime;
+	            generateRequestDetails(response, executionTime);
+
+	            // TODO : loop through "response.content" and to things
+	        }).fail(function(response, textStatus, jqXHR) {
+	            // TODO : do something in case it fails
+	        });
+	    } else {
+		    $('#resultStats')
+				    .css('display', 'none');
+
+		    $('#errorMsg')
+				    .html('Votre numéro de demande est invalide.<br />Veuillez essayer de nouveau.')
+				    .css('display', 'block');
+
+		    $('#requestsList')
+				    .css('display', 'none');
+	    }
 
     },
 
@@ -252,6 +286,14 @@ var greenlight = {
     }
 
 };
+
+// http://stackoverflow.com/questions/1591401/javascript-jquery-check-broken-links
+function checkUrl(url) {
+  var http = new XMLHttpRequest();
+  http.open('HEAD', url, false);
+  http.send();
+  return http.status!=404;
+}
 
 function generateRequestDetails(response, delay) {
     var nbrResults = (typeof response.content.length == "undefined") ? '1' : response.content.length;
@@ -277,8 +319,19 @@ function generateRequestDetails(response, delay) {
         requestsHtml += '<article class="toggleBox">';
         var bottomLinks = '';
         var addBottomLinks = false;
+	    var colors = {};
 
-        requestsHtml += '<header><h1>' + service.service_code + '<span></span></h1></header>';
+	    colors.red = (service.status == 'open' && (service.service_code == '' || service.service_code == null)) ? ' ok' : '';
+	    colors.orange = (service.status == 'open' && (service.service_code != '' && service.service_code != null)) ? ' ok' : '';
+	    colors.green = (service.status == 'closed' && (service.service_code != '' && service.service_code != null)) ? ' ok' : '';
+	    colors.x = (service.status == 'closed' && (service.service_code == '' || service.service_code == null)) ? ' ok' : '';
+
+	    var colorsSpan = '<span class="color red' + colors.red + '"></span>';
+	    colorsSpan += '<span class="color orange' + colors.orange + '"></span>';
+	    colorsSpan += '<span class="color green' + colors.green + '"></span>';
+	    colorsSpan += '<span class="color x' + colors.x + '"></span>';
+
+        requestsHtml += '<header><h1>' + service.service_name + colorsSpan + '</h1></header>';
         requestsHtml += '<div class="details">';
         requestsHtml += '<div class="spacer">';
 
@@ -287,9 +340,14 @@ function generateRequestDetails(response, delay) {
         for (var key in details) {
             var value = eval('service.' + key);
 
-            if (key == 'status') {
-                value = (value == 'open') ? 'Ouvert' : 'Fermé';
-            }
+	        switch (key) {
+		        case 'status':
+			        value = (value == 'open') ? 'Ouvert' : 'Fermé';
+			        break;
+		        case 'requested_datetime':
+			        // Format date to YY/mm/dd
+			        break;
+	        }
 
             if (value != null && value != 'null' && value != '') {
                 requestsHtml += '<tr>';
@@ -330,7 +388,7 @@ function generateRequestDetails(response, delay) {
     });
 
     $('#requestsList').append(requestsHtml);
-    generateToggleClick();
+	generateToggleClick();
 }
 
 /* Toggles */
@@ -560,3 +618,15 @@ function ResizeMap() {
     });
 }
 
+// http://stackoverflow.com/questions/2573521/how-do-i-output-an-iso-8601-formatted-string-in-javascript
+if (!Date.prototype.toISOString) {
+    Date.prototype.toISOString = function() {
+        function pad(n) { return n < 10 ? '0' + n : n }
+        return this.getUTCFullYear() + '-'
+            + pad(this.getUTCMonth() + 1) + '-'
+            + pad(this.getUTCDate()) + 'T'
+            + pad(this.getUTCHours()) + ':'
+            + pad(this.getUTCMinutes()) + ':'
+            + pad(this.getUTCSeconds()) + 'Z';
+    };
+}
