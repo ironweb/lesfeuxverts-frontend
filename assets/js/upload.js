@@ -40,11 +40,30 @@ function fileSelected()
 	
 }
 
+function rand(length,current){
+ 	current = current ? current : '';
+ 	return length ? rand( --length , "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz".charAt( Math.floor( Math.random() * 60 ) ) + current ) : current;
+}
+
 function uploadFile()
 	{
 	    var fd = new FormData();
 
-	    var key = file.name;
+	    if(file == undefined)
+	    {
+	    	alert('Aucun fichier choisi');
+	    	return;
+	    }
+
+	    var randomName = rand(16);
+	    var filename = file.name;
+
+	    filename = filename.split('.');
+		var extension = filename[filename.length-1]; // extension du fichier
+
+		filename = randomName+"."+extension;
+
+	    var key = filename;
 
 	    fd.append('key', key);
 	    fd.append('Content-Type',file.type);
@@ -52,7 +71,7 @@ function uploadFile()
 	    fd.append('AWSAccessKeyId', secret);
 	    fd.append('policy', policy)
 	    fd.append('signature',signature);
-	    fd.append("file",file);
+	    fd.append("file",file,filename);
 
 	    var xhr = new XMLHttpRequest();;
 
@@ -67,7 +86,7 @@ function uploadFile()
     	xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4)
 		    {
-		    	var media_url = UPLOAD_LINK+encodeURIComponent(file.name);
+		    	var media_url = UPLOAD_LINK+encodeURIComponent(filename);
 		    	$('#progressNumber').before('<img src="'+media_url+'">');
 		    }
 		}
