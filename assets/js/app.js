@@ -106,8 +106,17 @@ greenlight.create_request = function(){
      * data in the form
      * */
 
-    if(!CheckPoint())
-    {
+    if(!CheckPoint()) {
+        return;
+    }
+
+    /* Required fields */
+    if( ! (
+        $('first_name').val() &&
+        $('last_name').val() &&
+        $('email').val()
+    )){
+        $("#formValidationErrorMessage").reveal();
         return;
     }
 
