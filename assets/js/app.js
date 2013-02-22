@@ -38,25 +38,24 @@
       );
     });
 
-
     /* Tabs */
     var tabHeader = $('nav .tab');
     var tabContent = $('#container');
 
-
     tabHeader.click(function() {
      
-    if (!$(this).hasClass('active')) 
-    {
+    if (!$(this).hasClass('active')) {
 
         var current = $('#container > section:not(.active)');
+
+        $('#Arrow').stop().animate({left: $(this).position().left+$(this).width()/2-$('#Arrow').width()/2});
+
         var currentActive = $('#container > section.active');
         currentActive.removeClass('active');
         current.addClass('active');
         currentActive.fadeOut('slow', function() {
             $(this).css('display','none');
             current.fadeIn();
-	        greenlight.update_requests_list(0, 0, 0, '', '');
             });
 
         var svg1 = $('nav > .active').find('img').attr('src').split('/');
@@ -67,6 +66,8 @@
         tabHeader.removeClass('active');
         $(this).addClass('active');
 
+
+
         var svg2 = $(this).find('img').attr('src').split('/');
         svg2 = getUrlSyntax(svg2,'actif');
         
@@ -74,28 +75,6 @@
       }
     });
 
-    function getUrlSyntax(url,etat)
-    {
-        url = url[url.length-1].split("-");
-        url[1] = url[1].split('.');
-
-        url[1][0] = etat;
-
-        return "assets/img/"+url[0]+"-"+url[1][0]+"."+url[1][1];
-    }
-
-    $('#address_string').bind('keypress', function(e) {
-        if(e.keyCode==13){
-            PlaceAddressMarker();
-        }
-        // Enter pressed... do anything here...
-    });
-
-
-    /* Maps */
-    initialize(quebec);
-    PlaceCurrentLocationMarker();
-    window.addEventListener('resize', ResizeMap, false);
 
   });
 
@@ -117,185 +96,171 @@
 })(jQuery, this);
 
 
-var greenlight = {
-
-    BACKEND_URL: 'http://api.lesfeuxverts.com',
-    DEBUG: false,
+var greenlight = {};
+greenlight.BACKEND_URL = 'http://api.lesfeuxverts.com';
+greenlight.DEBUG = false;
     
-    update_services_list: function(){
+greenlight.update_services_list = function(){
+    /*
+     * Populates the services list in the form.
+     */
+    $.ajax({
+        url: greenlight.BACKEND_URL + '/services/',
+        dataType: 'json',
+        type: 'GET'
+    }).done(function(response, textStatus, jqXHR) {
+        if(greenlight.DEBUG){
+        }
+
+        var l = [];
+        var d = {};
+        $(response.content).each( function(i, service){
+            key = service.group + ' - ' + service.service_name;
+            l.push(key);
+            d[key] = service;
+        });
+
+        l.sort();
+
+        $(l).each( function(i, key){
+            service = d[key];
+            $('.servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
+        });
+
+
+    }).fail(function(response, textStatus, jqXHR) {
+        // TODO : do something in case it fails
+    });
+};
+
+greenlight.create_request = function(){
+    /*
+     * Creates a new service request using
+     * data in the form
+     * */
+      /*address_string
+        email
+        first_name
+        last_name
+        phone
+        description
+        media_url*/
+
+    if(!CheckPoint())
+    {
+        return;
+    }
+
+    var dataString = $('#creation').serialize();
+    dataString += "&lat="+currentPos.lat+"&long="+currentPos.long;
+    
+    $.ajax({
+        url: greenlight.BACKEND_URL + '/requests/',
+        data:dataString,
+        type: 'POST'
+    }).done(function(response, textStatus, jqXHR) {
+      
+        // Request Create Success
+    }).fail(function(response, textStatus, jqXHR) {
+        // Request Create Fail
+    });
+    
+};
+
+greenlight.update_requests_list = function(service, id, state, startdate, enddate){
+    $('#requestsList')
+            .html('')
+            .css({
+                'background-image': 'url(assets/img/loading.gif)',
+                'display': 'block'
+            });
+
+    $('#errorMsg')
+            .html('')
+            .css('display', 'none');
+
+    $('#resultStats')
+            .html('')
+            .css('display', 'block');
+
+    var requestData = {};
+    var urlExt = '';
+    var ajaxUrl = greenlight.BACKEND_URL + '/requests/' + urlExt;
+    var start = new Date().getMilliseconds();
+
+    if (service != 0) { requestData.service_code = service; }
+    if (state != 0) { requestData.status = state; }
+    if (id != 0) { urlExt = id; }
+
+    if (startdate != '') {
+        var tmpStartDate = new Date(startdate);
+        requestData.start_date = tmpStartDate.toISOString();
+    }
+    if (enddate != '') {
+        alert(enddate);
+        var tmpEndDate = new Date(enddate);
+        requestData.end_date = tmpEndDate.toISOString();
+    }
+
+
+
+    if (checkUrl(ajaxUrl)) {
+
         /*
-         * Populates the services list in the form.
-         */
+     * Populates the list of requests
+     * based on a bunch of search criteria
+     * */
         $.ajax({
-            url: greenlight.BACKEND_URL + '/services/',
+            url: greenlight.BACKEND_URL + '/requests/' + urlExt,
             dataType: 'json',
-            type: 'GET'
+            type: 'GET',
+            data: requestData
         }).done(function(response, textStatus, jqXHR) {
             if(greenlight.DEBUG){
+                console.log('requests', response.content);
             }
 
-            var l = [];
-            var d = {};
-            $(response.content).each( function(i, service){
-                key = service.group + ' - ' + service.service_name;
-                l.push(key);
-                d[key] = service;
-            });
+            var stop = new Date().getMilliseconds();
+            var executionTime = stop - start;
+            executionTime = (executionTime < 0) ? executionTime * -1 : executionTime;
+            greenlight.generateRequestDetails(response, executionTime);
 
-            l.sort();
-
-            $(l).each( function(i, key){
-                service = d[key];
-                $('.servicesList').append('<option value="' + service.service_code + '">' + key + '</option>');
-            });
-
-
+            // TODO : loop through "response.content" and to things
         }).fail(function(response, textStatus, jqXHR) {
             // TODO : do something in case it fails
         });
-    },
+    } else {
+        $('#resultStats')
+                .css('display', 'none');
 
-    create_request: function(){
-        /*
-         * Creates a new service request using
-         * data in the form
-         * */
-          /*address_string
-            email
-            first_name
-            last_name
-            phone
-            description
-            media_url*/
+        $('#errorMsg')
+                .html('Votre numéro de demande est invalide.<br />Veuillez essayer de nouveau.')
+                .css('display', 'block');
 
-        var dataString = $('#creation').serialize();
-
-        // Try to use GPS coordinates.
-        // No need to check if they're empty; they're optional.
-        if( userAllowsGeolocation() ){
-            if(greenlight.DEBUG){
-                console.log('User chose not to use geolocation.');
-            }
-            dataString += "&lat="+currentPos.lat+"&long="+currentPos.long;
-        }
-        
-        $.ajax({
-            url: greenlight.BACKEND_URL + '/requests/',
-            data:dataString,
-            type: 'POST'
-        }).done(function(response, textStatus, jqXHR) {
-          
-            // Request Create Success
-        }).fail(function(response, textStatus, jqXHR) {
-            // Request Create Fail
-        });
-        
-    },
-
-    update_requests_list: function(service, id, state, startdate, enddate){
         $('#requestsList')
-                .html('')
-                .css({
-			        'background-image': 'url(assets/img/loading.gif)',
-			        'display': 'block'
-		        });
-
-	    $('#errorMsg')
-			    .html('')
-			    .css('display', 'none');
-
-	    $('#resultStats')
-			    .html('')
-			    .css('display', 'block');
-
-        var requestData = {};
-        var urlExt = '';
-	    var ajaxUrl = greenlight.BACKEND_URL + '/requests/' + urlExt;
-        var start = new Date().getMilliseconds();
-
-        if (service != 0) { requestData.service_code = service; }
-	    if (state != 0) { requestData.status = state; }
-	    if (id != 0) { urlExt = id; }
-
-	    if (startdate != '') {
-		    var tmpStartDate = new Date(startdate);
-		    requestData.start_date = tmpStartDate.toISOString();
-	    }
-        if (enddate != '') {
-	        alert(enddate);
-	        var tmpEndDate = new Date(enddate);
-	        requestData.end_date = tmpEndDate.toISOString();
-        }
-
-
-
-	    if (checkUrl(ajaxUrl)) {
-
-	        /*
-	     * Populates the list of requests
-	     * based on a bunch of search criteria
-	     * */
-	        $.ajax({
-	            url: greenlight.BACKEND_URL + '/requests/' + urlExt,
-	            dataType: 'json',
-	            type: 'GET',
-	            data: requestData
-	        }).done(function(response, textStatus, jqXHR) {
-	            if(greenlight.DEBUG){
-	                console.log('requests', response.content);
-	            }
-
-	            var stop = new Date().getMilliseconds();
-	            var executionTime = stop - start;
-	            executionTime = (executionTime < 0) ? executionTime * -1 : executionTime;
-	            generateRequestDetails(response, executionTime);
-
-	            // TODO : loop through "response.content" and to things
-	        }).fail(function(response, textStatus, jqXHR) {
-	            // TODO : do something in case it fails
-	        });
-	    } else {
-		    $('#resultStats')
-				    .css('display', 'none');
-
-		    $('#errorMsg')
-				    .html('Votre numéro de demande est invalide.<br />Veuillez essayer de nouveau.')
-				    .css('display', 'block');
-
-		    $('#requestsList')
-				    .css('display', 'none');
-	    }
-
-    },
-
-    refresh_geolocation_fields : function(use_my_location){
-
-        if(use_my_location){
-            $('#address_string').removeAttr('disabled');
-
-            PlaceCurrentLocationMarker();
-
-        } else {
-            $('#address_string').attr('disabled', 'disabled');
-
-            address = $('#address_string').val();
-            if(address)
-                PlaceAddressMarker(address)
-
-        }
+                .css('display', 'none');
     }
 
 };
 
-// http://stackoverflow.com/questions/1591401/javascript-jquery-check-broken-links
-function checkUrl(url) {
-  var http = new XMLHttpRequest();
-  http.open('HEAD', url, false);
-  http.send();
-  return http.status!=404;
-}
+greenlight.refresh_geolocation_fields = function(use_my_location){
 
-function generateRequestDetails(response, delay) {
+    if(use_my_location){
+        $('#address_string').removeAttr('disabled');
+
+        PlaceCurrentLocationMarker();
+
+    } else {
+        $('#address_string').attr('disabled', 'disabled');
+
+        address = $('#address_string').val();
+        if(address)
+            PlaceAddressMarker(address)
+
+    }
+};
+
+greenlight.generateRequestDetails = function(response, delay){
     var nbrResults = (typeof response.content.length == "undefined") ? '1' : response.content.length;
     $('#resultStats').html('<strong>' + nbrResults + ' résultat(s) trouvé(s)</strong> en ' + (delay / 1000).toFixed(2) + ' secondes');
     $('#requestsList')
@@ -319,17 +284,17 @@ function generateRequestDetails(response, delay) {
         requestsHtml += '<article class="toggleBox">';
         var bottomLinks = '';
         var addBottomLinks = false;
-	    var colors = {};
+        var colors = {};
 
-	    colors.red = (service.status == 'open' && (service.service_code == '' || service.service_code == null)) ? ' ok' : '';
-	    colors.orange = (service.status == 'open' && (service.service_code != '' && service.service_code != null)) ? ' ok' : '';
-	    colors.green = (service.status == 'closed' && (service.service_code != '' && service.service_code != null)) ? ' ok' : '';
-	    colors.x = (service.status == 'closed' && (service.service_code == '' || service.service_code == null)) ? ' ok' : '';
+        colors.red = (service.status == 'open' && (service.service_code == '' || service.service_code == null)) ? ' ok' : '';
+        colors.orange = (service.status == 'open' && (service.service_code != '' && service.service_code != null)) ? ' ok' : '';
+        colors.green = (service.status == 'closed' && (service.service_code != '' && service.service_code != null)) ? ' ok' : '';
+        colors.x = (service.status == 'closed' && (service.service_code == '' || service.service_code == null)) ? ' ok' : '';
 
-	    var colorsSpan = '<span class="color red' + colors.red + '"></span>';
-	    colorsSpan += '<span class="color orange' + colors.orange + '"></span>';
-	    colorsSpan += '<span class="color green' + colors.green + '"></span>';
-	    colorsSpan += '<span class="color x' + colors.x + '"></span>';
+        var colorsSpan = '<span class="color red' + colors.red + '"></span>';
+        colorsSpan += '<span class="color orange' + colors.orange + '"></span>';
+        colorsSpan += '<span class="color green' + colors.green + '"></span>';
+        colorsSpan += '<span class="color x' + colors.x + '"></span>';
 
         requestsHtml += '<header><h1>' + service.service_name + colorsSpan + '</h1></header>';
         requestsHtml += '<div class="details">';
@@ -340,14 +305,14 @@ function generateRequestDetails(response, delay) {
         for (var key in details) {
             var value = eval('service.' + key);
 
-	        switch (key) {
-		        case 'status':
-			        value = (value == 'open') ? 'Ouvert' : 'Fermé';
-			        break;
-		        case 'requested_datetime':
-			        // Format date to YY/mm/dd
-			        break;
-	        }
+            switch (key) {
+                case 'status':
+                    value = (value == 'open') ? 'Ouvert' : 'Fermé';
+                    break;
+                case 'requested_datetime':
+                    // Format date to YY/mm/dd
+                    break;
+            }
 
             if (value != null && value != 'null' && value != '') {
                 requestsHtml += '<tr>';
@@ -388,235 +353,22 @@ function generateRequestDetails(response, delay) {
     });
 
     $('#requestsList').append(requestsHtml);
-	generateToggleClick();
-}
+    generateToggleClick();
+};
 
-/* Toggles */
-var multipleToggle = false; // True if multiple toggle boxes can be opened at the same time
-var toggleSpeed = 250; // Speed of toggle animation
 
-function generateToggleClick() {
-    toggleBox = $('.toggleBox');
-    $('div').undelegate('article[class^=toggleBox]', 'click');
-
-    $('.toggleBox div[class^=details]').each(function() {
-        $(this)
-        .attr('data-height', $(this).innerHeight())
-        .css({
-            'height': 0,
-            'display': 'block'
-        });
-    });
-
-    $('div').delegate('article[class^=toggleBox]', 'click', function(event) {
-        event.stopPropagation();
-        var detailsElement = $('.details', this);
-        var detailsHeight = detailsElement.data('height');
-        var openedEq = toggleBox.index($('.opened'));
-        var clickedEq = toggleBox.index($(this));
-
-        if (!multipleToggle) {
-            if (openedEq != -1 && openedEq != clickedEq) {
-                var openedToggleBox = $('.toggleBox:eq(' + openedEq + ')');
-                openedToggleBox.removeClass('opened');
-
-                $('.details', openedToggleBox)
-                    .clearQueue()
-                    .animate({
-                        height: 0
-                }, toggleSpeed);
-            }
-        }
-
-        if ($(this).hasClass('opened')) {
-            $(this).removeClass('opened');
-            detailsHeight = 0;
-        } else {
-            $(this).addClass('opened');
-        }
-
-        detailsElement
-                .clearQueue()
-                .animate({
-                    height: detailsHeight
-                }, toggleSpeed);
-    });
+// http://stackoverflow.com/questions/1591401/javascript-jquery-check-broken-links
+function checkUrl(url) {
+  var http = new XMLHttpRequest();
+  http.open('HEAD', url, false);
+  http.send();
+  return http.status!=404;
 }
 
 
-/* Maps */
-// TODO : Migrate in greenlight namespace
-var map;
-var directionsDisplay;
-var directionsService;
-var stepDisplay;
-var markerArray = [];
-var geocoder;
-
-// Starting Position (Maybe change)
-var quebec = new google.maps.LatLng(46.810811, -71.215439);
-var latlng = quebec;
-
-var styles = 
-[ 
-    { "stylers": 
-        [ 
-            { "hue": "#00ff91" } 
-        ] 
-    },
-    { "featureType": "road", "elementType": "geometry", "stylers": 
-        [ 
-            { "visibility": "simplified" }, 
-            { "hue": "#ff8800" }, { "lightness": 25 } 
-        ] 
-    },
-    { "featureType": "road", "elementType": "labels", "stylers": 
-        [ 
-            { "visibility": "off" } 
-        ] 
-    } 
-];
-
-var styledMap = new google.maps.StyledMapType(styles,{name: "Styled Map"});
-function initialize(pos) 
-{
-    // Instantiate a directions service.
-    directionsService = new google.maps.DirectionsService();
-    geocoder = new google.maps.Geocoder();
-    // Create a map and center it on Manhattan.
-    
-    var mapOptions = {
-            zoom: 13,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            center:pos,
-            scrollwheel: false,
-            mapTypeControl:false,
-            streetViewControl: false,
-    }
-    map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-    // Create a renderer for directions and bind it to the map.
-    var rendererOptions = {
-            map: map
-    }
-    directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions)
-    // Instantiate an info window to hold step text.
-    stepDisplay = new google.maps.InfoWindow();
-
-    map.mapTypes.set('map_style', styledMap);
-    map.setMapTypeId('map_style');
-}
-
-function debugMsgNoGeoloc(){
-    if(greenlight.DEBUG){
-        console.log('Your device does not support geolocation');
-    }
-}
-
-function PlaceCurrentLocationMarker(){
-    /* Depending on available features, gets location
-       directly from device, or uses google API to 
-       get latitude & longitude coordinates.
-
-       Stores it in the "latlng" global as a
-       google.maps.LatLng instance.
-     */
-
-    clearOverlays();
-
-    // Is the current location event relevant ?
-    // The user decides.
-    if(! $('#chk-use-my-location').is(':checked') ){
-        debugMsgNoGeoloc();
-        return;
-    }
-
-    // Not touch screen means not mobile, in 99% cases
-    if(!Modernizr.touch){
-        debugMsgNoGeoloc();
-        return;
-    }
-
-    // No geolocation available
-    if(!Modernizr.geolocation){
-        debugMsgNoGeoloc();
-        return;
-    }
-
-    if(!navigator.geolocation)
-    {
-        debugMsgNoGeoloc();
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(function(position) {
-        latlng = new google.maps.LatLng(
-            position.coords.latitude, position.coords.longitude
-        );
-        setMarker(latlng);
-    });
-
-}
-
-function setMarker(latlng){
-    /*
-     * This function places a marker on the map
-     * with a funny bouncy animation.
-     * latlng must be a google.maps.LatLng instance
-     * */
-
-    $('#AddressError').fadeOut();
-    map.setCenter(latlng);
-    var marker = new google.maps.Marker({
-        map: map,
-        position: latlng
-    });
-
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-
-    $(marker).delay(2000).queue(function( nxt ) {
-        marker.setAnimation(null);
-    });
-
-    markerArray.push(marker);
-
-}
-
-function PlaceAddressMarker(address) {
-
-    clearOverlays();
-
-    if(!address)
-        address = $('#address_string').val();
-
-    geocoder.geocode( { 'address': address}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var loc = results[0].geometry.location;
-            latlng = new google.maps.LatLng( loc.lat(), loc.lng() );
-            setMarker(latlng);
-        } else {
-            $('#AddressError').fadeIn();
-            if(greenlight.DEBUG){
-                console.log('Google Maps API could not geolocate this address');
-            }
-        }
-    });
-} 
-
-function clearOverlays() {
-    if (markerArray) {
-        for (i in markerArray) {
-            markerArray[i].setMap(null);
-        }
-    }
-}
-
-function ResizeMap() {
-    initialize(latlng);
-    var marker = new google.maps.Marker({
-        map: map,
-        position: latlng
-    });
-}
+/*
+ * General purpose stuff
+ */
 
 // http://stackoverflow.com/questions/2573521/how-do-i-output-an-iso-8601-formatted-string-in-javascript
 if (!Date.prototype.toISOString) {
