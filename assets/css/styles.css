@@ -20,8 +20,8 @@
 :: Contenu
 :: Footer
 :: Toggles
+:: Tabs
 :: Media Queries
-::
 ::
 ::;
 */
@@ -85,19 +85,6 @@ fieldset {
 	color: #717070;
 }
 
-div.button {
-	color: #fff;
-	background: #a9a8a8;
-	padding: 10px 20px;
-	border: 1px solid #ededed;
-	border-radius: 2px;
-	display: inline-block;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	-ms-border-radius: 2px;
-	-o-border-radius: 2px;
-	border-radius: 2px;
-}
 
 
 /* -------------------------------------------------- 
@@ -112,6 +99,7 @@ header {
 
 #logo {
 	text-align: center;
+	margin-bottom: 20px;
 }
 
 #description {
@@ -119,7 +107,7 @@ header {
 	font-weight: 300;
 	line-height: 4rem;
 	text-align: center;
-	margin: 60px auto;
+	margin: 60px auto 40px auto;
 }
 
 nav {
@@ -129,7 +117,15 @@ nav {
 nav a {
     color: #fff;
     cursor:pointer;
-    margin: 40px 0 0 0;
+    margin: 20px 0;
+}
+
+nav a p {
+	font-size: 1.125rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #1c4654;
+	margin-top: 20px;
 }
 
 header a {
@@ -179,6 +175,31 @@ input[type="text"] {
 	font-size: 1.125em;
 	margin-bottom: 15px;
 }
+select {
+	margin: 20px 0;
+}
+div.button {
+	color: #fff;
+	background: #37af78;
+	padding: 10px 20px;
+	border: 1px solid #ededed;
+	border-radius: 2px;
+	display: inline-block;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+	cursor: pointer;
+}
+
+#stats {
+	background: #37af78;
+	color: #fff;
+	padding: 40px 0;
+}
+
+
 
 
 
@@ -187,10 +208,11 @@ input[type="text"] {
 -----------------------------------------------------
 */
 footer {
-	background: #37af78;
-	color: #fff;
+	background: #fff;
+	color: #a9a8a8;
 	padding: 40px 0;
 }
+
 
 
 
@@ -244,7 +266,10 @@ footer {
 }
 
 
-/* Tabs */
+/* -------------------------------------------------- 
+   Tabs
+-----------------------------------------------------
+*/
 
 #tabHeaderContainer {
     padding-top: 20px;
@@ -302,14 +327,27 @@ footer {
 		font-size: 2rem;
 		line-height: 2.5rem;
 	}
+	#userTooltip {
+		display: none;
+	}
+
 }
 
 @media only screen and (max-width: 767px) {
+	header {
+		padding: 80px 0 40px 0;
+	}
+	nav {
+		border: 1px solid #2c9868;
+	}
 	#container {
 		padding: 40px 0;
 	}
 	#map_canvas {
 		height: 200px;
+	}
+	#userTooltip {
+		display: none;
 	}
 }
 
@@ -321,6 +359,9 @@ footer {
 	#description {
 		font-size: 2rem;
 		line-height: 2.5rem;
+	}
+	#userTooltip {
+		visibility: none;
 	}
 }
 
