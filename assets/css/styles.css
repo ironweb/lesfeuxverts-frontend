@@ -19,8 +19,8 @@
 :: Header
 :: Contenu
 :: Footer
+:: Toggles
 :: Media Queries
-::
 ::
 ::
 ::;
@@ -38,10 +38,6 @@ html {
 	font-size: 16px;
 	line-height: 16px;
 	line-height: 1rem;
-}
-
-header, #container {
-	padding: 100px 0;
 }
 
 /* -- CLEARFIX -- */
@@ -111,6 +107,7 @@ div.button {
 header {
 	background: #37af78;
 	color: #fff;
+	padding: 100px 0 40px 0;
 }
 
 #logo {
@@ -132,10 +129,16 @@ nav {
 nav a {
     color: #fff;
     cursor:pointer;
+    margin: 40px 0 0 0;
 }
 
 header a {
 	display: inline-block;
+}
+
+.tab img {
+	width: 35%;
+	text-align: center;
 }
 
 
@@ -143,6 +146,11 @@ header a {
    Contenu
 -----------------------------------------------------
 */
+
+#container {
+	padding: 100px 0;
+}
+
 #explanation {
 	font-size: 1.25rem;
 	font-weight: 800;
@@ -186,43 +194,10 @@ footer {
 
 
 
-
 /* -------------------------------------------------- 
-   Media Queries
+   Toggles
 -----------------------------------------------------
 */
-@media only screen and (min-width: 1441px) {
-	.row {
-		width: 1440px;
-	}
-}
-
-@media only screen and (max-width: 1279px) and (min-width: 768px) {
-	#description {
-		font-size: 2rem;
-		line-height: 2.5rem;
-	}
-}
-
-@media only screen and (max-width: 767px) {
-	#map_canvas {
-		height: 200px;
-	}
-}
-
-@media screen and (orientation: landscape) {
-
-}
-
-@media screen and (orientation: portrait) {
-	#description {
-		font-size: 2rem;
-		line-height: 2.5rem;
-	}
-}
-
-
-/* Toggles */
 
 .toggleBox {
     border: #333 solid 1px;
@@ -308,6 +283,47 @@ footer {
 
 #requestsList article header {
     padding: 0;
+}
+
+
+
+
+
+/* -------------------------------------------------- 
+   Media Queries
+-----------------------------------------------------
+*/
+@media only screen and (min-width: 1441px) {
+	.row {
+		width: 1440px;
+	}
+}
+
+@media only screen and (max-width: 1279px) and (min-width: 768px) {
+	#description {
+		font-size: 2rem;
+		line-height: 2.5rem;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	#container {
+		padding: 40px 0;
+	}
+	#map_canvas {
+		height: 200px;
+	}
+}
+
+@media screen and (orientation: landscape) {
+
+}
+
+@media screen and (orientation: portrait) {
+	#description {
+		font-size: 2rem;
+		line-height: 2.5rem;
+	}
 }
 
 
