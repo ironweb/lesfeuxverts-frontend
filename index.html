@@ -6,12 +6,13 @@
 <head>
 	<meta charset="utf-8" />
     <meta property="og:site_name" content="Les Feux Verts" />
-    <meta property="og:url" content="http://www.lesfeuxverts.com/" />
+    <meta property="og:url" content="http://lesfeuxverts.com/" />
     <meta property="og:title" content="Les Feux Verts: Pour être des citoyens lumineux" />
     <meta property="og:description" content="L'application Les Feux Verts vous permet d'aider la Ville de Québec à s'améliorer et à évoluer en y signalant des problèmes" />
     <meta property="og:image" content="http://www.lesfeuxverts.com/assets/img/logo-les-feux-verts-facebook.png" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_CA" />
+	<meta property="fb:admins" content="653045027,876810130" />
 
 	<!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
@@ -196,6 +197,8 @@
     <div class="reveal-modal large" id="addRequestSuccessMessage">
         <h2>Votre demande a été envoyée avec succès!</h2>
         <p>La ville de Québec vous remercie d'avoir allumé un feu pour lui signaler un problème.<br />Un suivi sera effectué auprès de vous par courriel dans les plus brefs délais.</p>
+        <p>Voici votre numéro de suivi pour votre demande : </p><br />
+        <p style="text-align:center" id="RequestToken"></p>
         <a class="close-reveal-modal">&#215;</a>
     </div>
         <div class="reveal-modal large" id="addRequestErrorMessage">

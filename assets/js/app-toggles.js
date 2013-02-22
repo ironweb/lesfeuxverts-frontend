@@ -80,10 +80,10 @@ $(document).ready(function() {
             tabHeader.removeClass('active');
             $(this).addClass('active');
 
-          } else {
-	        scrollBodyToContent();
+	        
         }
 
+        scrollBodyToContent();
     });
 
 });
