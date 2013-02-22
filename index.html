@@ -65,7 +65,7 @@
 
 	<header>
 		<div class="row">
-			<div id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></div>
+			<h1 id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></h1>
 			<p id="description" class="ten centered clearfix hide-for-small">Certains me reprochaient de ne pas diffuser sur Internet certains dossiers stratégiques, certains plans d'action.</p>
 			<nav class="row">
 				<a class="tab active four columns">
@@ -87,7 +87,7 @@
 		<section id="CreationSection" class="tab active">
 			<form method="POST" id="creation">
 				<section class="row">
-					<div class="eight columns centered">
+					<div class="ten columns centered">
 						<img src="assets/img/schema.png" alt="Schéma de l'utilisation" class="six columns hide-for-medium-down">
 			            <div class="six columns">
 			                <fieldset>
@@ -148,9 +148,16 @@
 
 		</section>
 	</section>
-
+	
 	<section id="stats">
 		<div class="row">
+			<h1>LES STATISTIQUES</h1>
+		</div>
+	</section>
+
+	<footer>
+		<div class="row">
+			<!--
 			<div id="stats1"></div>
 			<form id="form1" enctype="multipart/form-data" method="post">
 				<div class="row">
@@ -165,17 +172,18 @@
 				</div>
 				<div id="progressNumber"></div>
 			</form>
-		</div>
-	</section>
-
-	<footer>
-		<div class="row">
-			<p><span>Les Feux Verts</span> est une application web créée dans le cadre du <a href="http://ironweb.org" target="_blank">Iron Web 2013</a> sous la license MIT.</p>
-			<img src="assets/img/ironweb2.png" alt="Iron Web 2013">
+		-->
+			<div class="twelve">
+				<img src="assets/img/ironweb2.png" alt="Iron Web 2013">
+			</div>
+			<div class="twelve">
+				<p><span>Les Feux Verts</span> est une application sous license MIT créée dans le cadre du <a href="http://ironweb.org">Iron Web 2013</a> sous license MIT.</p>
+				<p>©L'équipe des Justiciers Verts, 2013.</p>
+			</div>
 		</div>
 	</footer>
 	
-	<script src="assets/js/stats.js"></script>
+	
 
     <div class="reveal-modal large" id="addRequestSuccessMessage">
         <h2>Votre demande a été envoyée avec succès!</h2>
@@ -187,6 +195,8 @@
         <p>Une erreur est survenue lors de l'enregistrement de votre demande.<br />Veuillez essayer de nouveau ou communiquer avec le support technique.</p>
         <a class="close-reveal-modal">&#215;</a>
     </div>
+
+    <script src="assets/js/stats.js"></script>
 
 </body>
 </html>

@@ -41,7 +41,7 @@ function initialize(pos)
         // Create a map and center it on Manhattan.
         
        var mapOptions = {
-                zoom: 13,
+                zoom:11,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 center:pos,
                 scrollwheel: false,

@@ -54,6 +54,7 @@ function generateToggleClick() {
 
 $(document).ready(function() {
     /* Tabs */
+
     var tabHeader = $('nav .tab');
     var tabContent = $('#container');
 
@@ -70,13 +71,15 @@ $(document).ready(function() {
             currentActive.fadeOut('slow', function() {
                 $(this).css('display','none');
                 current.fadeIn();
-                greenlight.update_requests_list(0, 0, 0, '', '');
+                
             });
 
 
             tabHeader.removeClass('active');
             $(this).addClass('active');
           }
+
+          $(this).delay(250).queue(function(){scrollBodyToContent()});
     });
 
     

@@ -21,8 +21,9 @@
 
 
     // Set this to true for more log messages
-    greenlight.DEBUG = true;
+    greenlight.DEBUG = false;
     greenlight.update_services_list();
+    greenlight.update_requests_list(0, 0, 0, '', '');
 
     $('#submitRequestId').click(function() {
         greenlight.update_requests_list(0, $('#requestId').val(), 0, '', '');
@@ -316,14 +317,14 @@ greenlight.generateRequestDetails = function(response, delay){
     });
 
     $('#requestsList').append(requestsHtml);
-	scrollBodyToContent();
+	
     generateToggleClick();
 };
 
 function scrollBodyToContent() {
 	$('html, body').animate({
 		scrollTop: $('body > header').innerHeight()
-	}, 1000);
+	}, 500);
 }
 
 
