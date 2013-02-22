@@ -324,7 +324,12 @@ footer {
 	}
 }
 
-
 #resultStats {
     padding: 10px 0;
+}
+
+#Arrow {
+    width:70px;
+    height: 40px;
+    position:absolute;
 }
