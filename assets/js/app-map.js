@@ -279,10 +279,7 @@ function clearOverlays() {
 
 function ResizeMap() {
     initialize(latlng);
-    var marker = new google.maps.Marker({
-        map: map,
-        position: latlng
-    });
+    setMarker(latlng);
 }
 
 $(document).ready(function() {
