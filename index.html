@@ -100,10 +100,10 @@
 			            <div class="six columns">
 			                <fieldset>
 			                    <legend><h2>Entrez vos informations</h2></legend>
-			                    <input type="text" name="first_name" class="twelve" placeholder="Votre prénom">
-			                    <input type="text" name="last_name" class="twelve" placeholder="Votre nom">
-			                    <input type="text" name="email" class="twelve" placeholder="Votre courriel">
-			                    <input type="text" name="phone" class="twelve" placeholder="Votre téléphone">
+			                    <input type="text" id="first_name" name="first_name" class="twelve" placeholder="Votre prénom">
+			                    <input type="text" id="last_name" name="last_name" class="twelve" placeholder="Votre nom">
+			                    <input type="text" id="email" name="email" class="twelve" placeholder="Votre courriel">
+			                    <input type="text" id="phone" name="phone" class="twelve" placeholder="Votre téléphone">
 			                </fieldset>
 			                <fieldset>
 			                    <legend><h2>Définir la demande</h2></legend>
@@ -198,9 +198,14 @@
         <p>La ville de Québec vous remercie d'avoir allumé un feu pour lui signaler un problème.<br />Un suivi sera effectué auprès de vous par courriel dans les plus brefs délais.</p>
         <a class="close-reveal-modal">&#215;</a>
     </div>
-        <div class="reveal-modal large" id="addRequestErrorMessage">
+    <div class="reveal-modal large" id="addRequestErrorMessage">
         <h2>Une erreur est survenue</h2>
         <p>Une erreur est survenue lors de l'enregistrement de votre demande.<br />Veuillez essayer de nouveau ou communiquer avec le support technique.</p>
+        <a class="close-reveal-modal">&#215;</a>
+    </div>
+    <div class="reveal-modal large" id="formValidationErrorMessage">
+        <h2>Une erreur est survenue</h2>
+        <p>Les champs <b>Nom</b>, <b>Prénom</b> et <b>Courriel</b> sont obligatoires.</p>
         <a class="close-reveal-modal">&#215;</a>
     </div>
 
