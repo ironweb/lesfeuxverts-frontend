@@ -47,3 +47,24 @@ input[type=button].button {
 	font-weight: 400;
 	font-size: 16px;
 }
+#txtSuppInfos {
+	font-size: 0.7rem;
+}
+#txtSuppInfos .mask {
+	height: 36px;
+	overflow: hidden;
+}
+#txtSuppInfos .mask p {
+	padding: 5px;
+}
+#txtSuppInfos .mask p + p {
+	border-top: #CCC dotted 1px;
+}
+#txtSuppInfos .readMore {
+	text-align: right;
+}
+textarea {
+	height: 75px;
+	margin-top: 10px;
+	padding: 4px;
+}
