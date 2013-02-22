@@ -182,7 +182,18 @@ var greenlight = {
     update_requests_list: function(service, id){
         $('#requestsList')
                 .html('')
-                .css('background-image', 'url(assets/img/loading.gif)');
+                .css({
+			        'background-image': 'url(assets/img/loading.gif)',
+			        'display': 'block'
+		        });
+
+	    $('#errorMsg')
+			    .html('')
+			    .css('display', 'none');
+
+	    $('#resultStats')
+			    .html('')
+			    .css('display', 'none');
 
         var requestData = {};
         var urlExt = '';
@@ -196,35 +207,58 @@ var greenlight = {
             urlExt = id;
         }
 
-        /*
-     * Populates the list of requests
-     * based on a bunch of search criteria
-     * */
-        $.ajax({
-            url: greenlight.BACKEND_URL + '/requests/' + urlExt,
-            dataType: 'json',
-            type: 'GET',
-            data: requestData
-        }).done(function(response, textStatus, jqXHR) {
-            if(greenlight.DEBUG){
-                console.log('requests', response.content);
-            }
+	    var ajaxUrl = greenlight.BACKEND_URL + '/requests/' + urlExt;
 
-            var stop = new Date().getMilliseconds();
-            var executionTime = stop - start;
-            executionTime = (executionTime < 0) ? executionTime * -1 : executionTime;
-            generateRequestDetails(response, executionTime);
+	    if (checkUrl(ajaxUrl)) {
 
-            // TODO : loop through "response.content" and to things
-        }).fail(function(response, textStatus, jqXHR) {
-            // TODO : do something in case it fails
-        });
+	        /*
+	     * Populates the list of requests
+	     * based on a bunch of search criteria
+	     * */
+	        $.ajax({
+	            url: greenlight.BACKEND_URL + '/requests/' + urlExt,
+	            dataType: 'json',
+	            type: 'GET',
+	            data: requestData
+	        }).done(function(response, textStatus, jqXHR) {
+	            if(greenlight.DEBUG){
+	                console.log('requests', response.content);
+	            }
+
+	            var stop = new Date().getMilliseconds();
+	            var executionTime = stop - start;
+	            executionTime = (executionTime < 0) ? executionTime * -1 : executionTime;
+	            generateRequestDetails(response, executionTime);
+
+	            // TODO : loop through "response.content" and to things
+	        }).fail(function(response, textStatus, jqXHR) {
+	            // TODO : do something in case it fails
+	        });
+	    } else {
+		    $('#resultStats')
+				    .css('display', 'none');
+
+		    $('#errorMsg')
+				    .html('Votre numéro de demande est invalide.<br />Veuillez essayer de nouveau.')
+				    .css('display', 'block');
+
+		    $('#requestsList')
+				    .css('display', 'none');
+	    }
 
     }
 
 
 
 };
+
+// http://stackoverflow.com/questions/1591401/javascript-jquery-check-broken-links
+function checkUrl(url) {
+  var http = new XMLHttpRequest();
+  http.open('HEAD', url, false);
+  http.send();
+  return http.status!=404;
+}
 
 function generateRequestDetails(response, delay) {
     var nbrResults = (typeof response.content.length == "undefined") ? '1' : response.content.length;
@@ -251,7 +285,7 @@ function generateRequestDetails(response, delay) {
         var bottomLinks = '';
         var addBottomLinks = false;
 
-        requestsHtml += '<header><h1>' + service.service_code + '<span></span></h1></header>';
+        requestsHtml += '<header><h1>' + service.service_name + '<span></span></h1></header>';
         requestsHtml += '<div class="details">';
         requestsHtml += '<div class="spacer">';
 
