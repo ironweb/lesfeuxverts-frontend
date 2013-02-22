@@ -48,6 +48,7 @@
 
 </head>
 <body>
+
 	<header>
 		<div class="row">
 			<div id="logo" class="four columns centered"><img src="assets/img/logo.png" alt="Les Feux Verts"></div>
@@ -74,17 +75,16 @@
 			            <div class="six columns">
 			                <fieldset>
 			                    <legend><h2>Entrez vos informations</h2></legend>
-			                    <input type="text" name="first_name" class="ten" placeholder="Votre prénom">
-			                    <input type="text" name="last_name" class="ten" placeholder="Votre nom">
-			                    <input type="text" name="email" class="ten" placeholder="Votre courriel">
-			                    <input type="text" name="phone" class="ten" placeholder="Votre téléphone">
+			                    <input type="text" name="first_name" class="ten mobile-four" placeholder="Votre prénom">
+			                    <input type="text" name="last_name" class="ten mobile-four" placeholder="Votre nom">
+			                    <input type="text" name="email" class="ten mobile-four" placeholder="Votre courriel">
+			                    <input type="text" name="phone" class="ten mobile-four" placeholder="Votre téléphone">
 			                </fieldset>
 			                <fieldset>
 			                    <legend><h2>Définir la demande</h2></legend>
-			                    <select id="servicesList" class="seven clearfix" name="service_code"></select>
-		                        <p>Utiliser ma localisation :</p>
-		                        <input type="checkbox" id="use-my-location" checked/>
-					            <input type="text" id="address_string" class="ten" name="address_string" placeholder="Adresse à chercher"/>
+			                    <select id="servicesList" class="ten mobile-four clearfix" name="service_code"></select>
+		                        <p>Utiliser ma localisation :<input type="checkbox" id="use-my-location" checked/></p>
+					            <input type="text" id="address_string" class="ten mobile-four" name="address_string" placeholder="Adresse à chercher"/>
 					            <div class="button" onclick="getAddress()">Envoyer</div>
 					            <span id="AddressError">Adresse introuvable</span>
 								</div>
@@ -99,7 +99,8 @@
 		</section>
 
 		<section id="ConsultationSection" class="tab" style="display:none">
-			<input type="text" id="requestId" /> <input type="button" value="Recherche" id="submitRequestId" />
+			<input type="text" id="requestId"/>
+			<input type="button" value="Recherche" id="submitRequestId" />
 			<div id="requestsList"></div>
 			<div id="resultStats"></div>
 		</section>

@@ -20,8 +20,8 @@
 :: Contenu
 :: Footer
 :: Toggles
+:: Tabs
 :: Media Queries
-::
 ::
 ::;
 */
@@ -85,19 +85,6 @@ fieldset {
 	color: #717070;
 }
 
-div.button {
-	color: #fff;
-	background: #a9a8a8;
-	padding: 10px 20px;
-	border: 1px solid #ededed;
-	border-radius: 2px;
-	display: inline-block;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	-ms-border-radius: 2px;
-	-o-border-radius: 2px;
-	border-radius: 2px;
-}
 
 
 /* -------------------------------------------------- 
@@ -179,6 +166,23 @@ input[type="text"] {
 	font-size: 1.125em;
 	margin-bottom: 15px;
 }
+select {
+	margin: 20px 0;
+}
+div.button {
+	color: #fff;
+	background: #37af78;
+	padding: 10px 20px;
+	border: 1px solid #ededed;
+	border-radius: 2px;
+	display: inline-block;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+}
+
 
 
 
@@ -244,7 +248,10 @@ footer {
 }
 
 
-/* Tabs */
+/* -------------------------------------------------- 
+   Tabs
+-----------------------------------------------------
+*/
 
 #tabHeaderContainer {
     padding-top: 20px;
